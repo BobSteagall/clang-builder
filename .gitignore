@@ -2,6 +2,9 @@ binutils-2*
 gcc-5*
 gcc-6*
 gcc-7*
+llvm-*
+libcxx-*
+libcxxabi-*
 dist
 packages
 tarballs

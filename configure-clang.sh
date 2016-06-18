@@ -87,7 +87,7 @@ then
                 CXX=$GCC_INSTALL_PREFIX/bin/g++                             \
                 CC=$GCC_INSTALL_PREFIX/bin/gcc                              \
                 CPP=$GCC_INSTALL_PREFIX/bin/cpp                             \
-                CXXFLAGS="-Wno-unused-local-typedefs -Wno-unused-but-set-variable -Wno-overloaded-virtual -Wno-sign-compare"
+                CXXFLAGS="-Wno-unused-function -Wno-unused-local-typedefs -Wno-unused-but-set-variable -Wno-overloaded-virtual -Wno-sign-compare"
         fi
     else
         echo "found"
