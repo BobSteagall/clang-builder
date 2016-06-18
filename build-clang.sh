@@ -22,18 +22,18 @@ source ./clang-build-vars.sh
 ##
 if [ -n "$DO_CLANG" ]
 then
-    ./unpack-clang.sh -c    | tee build_clang.log
-    ./configure-clang.sh -c | tee -a build_clang.log
-    ./make-clang.sh -c      | tee -a build_clang.log
+    ./unpack-clang.sh -c
+    ./configure-clang.sh -c
+    ./make-clang.sh -c
 fi
 
 ##- Unpack, configure, and build LIBCXX
 ##
 if [ -n "$DO_CXXLIB" ]
 then
-    ./unpack-clang.sh -l    | tee build_libc++.log
-    ./configure-clang.sh -l | tee -a build_libc++.log
-    ./make-clang.sh -l      | tee -a build_libc++.log
+    ./unpack-clang.sh -l
+    ./configure-clang.sh -l
+    ./make-clang.sh -l
 fi
 
 ./test-clang.sh
