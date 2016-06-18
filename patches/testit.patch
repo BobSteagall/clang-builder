@@ -1,0 +1,23 @@
+--- testit-orig	2014-01-15 11:28:42.000000000 -0500
++++ testit	2016-06-16 06:31:35.742094363 -0400
+@@ -28,7 +28,7 @@
+ 
+ if [ -z "$CC" ]
+ then
+-	if which xcrun >/dev/null
++	if which xcrun > /dev/null 2>&1
+ 	then
+ 		CC="xcrun clang++"
+ 	else
+@@ -56,6 +56,11 @@
+        SOURCE_LIB="-L$LIBCXX_ROOT/lib"
+ fi
+ 
++if [ -z "$LIBS" ]
++then
++	LIBS="-lpthread"
++fi
++
+ case $TRIPLE in
+   *-*-mingw* | *-*-cygwin* | *-*-win*)
+ 	TEST_EXE=test.exe

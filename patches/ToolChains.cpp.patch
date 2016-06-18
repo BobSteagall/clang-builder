@@ -1,0 +1,84 @@
+--- ToolChains.cpp-orig	2015-07-13 19:27:56.000000000 -0400
++++ ToolChains.cpp	2016-06-03 19:47:09.056742993 -0400
+@@ -2621,8 +2621,11 @@
+        Triple.getArch() == llvm::Triple::ppc) &&
+       llvm::sys::fs::exists(getDriver().SysRoot + "/usr/lib32/crt1.o"))
+     getFilePaths().push_back(getDriver().SysRoot + "/usr/lib32");
+-  else
++  else {
++    //- KEWB
++    getFilePaths().push_back(getDriver().SysRoot + std::string(LLVM_PREFIX) + "/lib");
+     getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
++  }
+ }
+ 
+ ToolChain::CXXStdlibType FreeBSD::GetCXXStdlibType(const ArgList &Args) const {
+@@ -2648,6 +2651,10 @@
+ 
+   switch (GetCXXStdlibType(DriverArgs)) {
+   case ToolChain::CST_Libcxx:
++    //- KEWB
++    addSystemInclude(DriverArgs, CC1Args,
++                     getDriver().SysRoot + std::string(LLVM_PREFIX) +
++                     "/include/c++/v1");
+     addSystemInclude(DriverArgs, CC1Args,
+                      getDriver().SysRoot + "/usr/include/c++/v1");
+     break;
+@@ -3192,6 +3199,11 @@
+   const std::string OSLibDir = getOSLibDir(Triple, Args);
+   const std::string MultiarchTriple = getMultiarchTriple(Triple, SysRoot);
+ 
++  //- KEWB
++  if (GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) {
++      addPathIfExists(SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
++  }
++
+   // Add the multilib suffixed paths where they are available.
+   if (GCCInstallation.isValid()) {
+     const llvm::Triple &GCCTriple = GCCInstallation.getTriple();
+@@ -3292,6 +3304,11 @@
+   if (StringRef(D.Dir).startswith(SysRoot))
+     addPathIfExists(D.Dir + "/../lib", Paths);
+ 
++  //- KEWB
++  if (GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) {
++    addPathIfExists(SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
++  }
++
+   addPathIfExists(SysRoot + "/lib", Paths);
+   addPathIfExists(SysRoot + "/usr/lib", Paths);
+ }
+@@ -3530,6 +3547,9 @@
+   // Check if libc++ has been enabled and provide its include paths if so.
+   if (GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx) {
+     const std::string LibCXXIncludePathCandidates[] = {
++        //- KEWB
++        getDriver().SysRoot + std::string(LLVM_PREFIX) + "/include/c++/v1",
++
+         // The primary location is within the Clang installation.
+         // FIXME: We shouldn't hard code 'v1' here to make Clang future proof to
+         // newer ABI versions.
+@@ -3598,6 +3618,23 @@
+   }
+ }
+ 
++//- KEWB
++void Linux::AddCXXStdlibLibArgs(const ArgList &Args,
++                                    ArgStringList &CmdArgs) const {
++  CXXStdlibType Type = GetCXXStdlibType(Args);
++
++  switch (Type) {
++  case ToolChain::CST_Libcxx:
++    CmdArgs.push_back("-lc++");
++    CmdArgs.push_back("-lstdc++");
++    break;
++
++  case ToolChain::CST_Libstdcxx:
++    CmdArgs.push_back("-lstdc++");
++    break;
++  }
++}
++
+ bool Linux::isPIEDefault() const { return getSanitizerArgs().requiresPIE(); }
+ 
+ SanitizerMask Linux::getSupportedSanitizers() const {

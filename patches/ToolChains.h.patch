@@ -1,0 +1,14 @@
+--- ToolChains.h-orig	2015-07-27 16:42:22.000000000 -0400
++++ ToolChains.h	2016-06-03 19:47:09.056742993 -0400
+@@ -679,6 +679,11 @@
+   void AddClangCXXStdlibIncludeArgs(
+       const llvm::opt::ArgList &DriverArgs,
+       llvm::opt::ArgStringList &CC1Args) const override;
++  //- KEWB
++  void
++  AddCXXStdlibLibArgs(const llvm::opt::ArgList &Args,
++                      llvm::opt::ArgStringList &CmdArgs) const override;
++
+   bool isPIEDefault() const override;
+   SanitizerMask getSupportedSanitizers() const override;
+ 
