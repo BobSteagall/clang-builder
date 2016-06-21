@@ -73,12 +73,12 @@ build process.  Each operation is a distinct step in that process.
 
 The process is pretty simple:
 
- a. Clone the git repo and checkout the clang37 branch.
+ a. Clone the git repo and checkout the clang38 branch.
 
     $ cd <build_dir>
     $ git clone git@gitlab.com/BobSteagall/clang-builder.git
     $ cd <build_dir>/clang-builder
-    $ git checkout clang37
+    $ git checkout clang38
 
  b. Customize the variables exported by clang-build-vars.sh.  In particular,
     you will need to customize the first variable at the top of that file,
