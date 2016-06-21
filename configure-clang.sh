@@ -124,7 +124,7 @@ then
         ##      These environment variables are set to ensure that
         ##      compilation occurs using the correct CLANG executables
         ##
-        ##  -DLIBCXX_CXX_ABI=libcxxrt/libstdc++/libsuppc++
+        ##  -DLIBCXX_CXX_ABI=libcxxrt|libstdc++|libsuppc++
         ##      This option is set to indicate that we want to use the LLVM
         ##      libc++abi library as the runtime ABI support library.
         ##

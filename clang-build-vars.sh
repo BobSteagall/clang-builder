@@ -11,7 +11,7 @@
 ##  version is determined by checking out a branch of the "clang-builder"
 ##  repo, rather than changing it here.
 ##
-export CLANG_VERSION=3.7.1
+export CLANG_VERSION=3.8.0
 
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang or clang++ with the -v flag

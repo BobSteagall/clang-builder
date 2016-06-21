@@ -1,8 +1,8 @@
---- ToolChains.cpp-orig	2015-07-13 19:27:56.000000000 -0400
-+++ ToolChains.cpp	2016-06-03 19:47:09.056742993 -0400
-@@ -2621,8 +2621,11 @@
+--- ToolChains.cpp-orig	2016-02-16 14:56:48.000000000 -0500
++++ ToolChains.cpp	2016-06-21 08:08:09.369285982 -0400
+@@ -3069,8 +3069,11 @@
         Triple.getArch() == llvm::Triple::ppc) &&
-       llvm::sys::fs::exists(getDriver().SysRoot + "/usr/lib32/crt1.o"))
+       D.getVFS().exists(getDriver().SysRoot + "/usr/lib32/crt1.o"))
      getFilePaths().push_back(getDriver().SysRoot + "/usr/lib32");
 -  else
 +  else {
@@ -13,7 +13,7 @@
  }
  
  ToolChain::CXXStdlibType FreeBSD::GetCXXStdlibType(const ArgList &Args) const {
-@@ -2648,6 +2651,10 @@
+@@ -3096,6 +3099,10 @@
  
    switch (GetCXXStdlibType(DriverArgs)) {
    case ToolChain::CST_Libcxx:
@@ -24,47 +24,79 @@
      addSystemInclude(DriverArgs, CC1Args,
                       getDriver().SysRoot + "/usr/include/c++/v1");
      break;
-@@ -3192,6 +3199,11 @@
+@@ -3108,22 +3115,6 @@
+   }
+ }
+ 
+-void FreeBSD::AddCXXStdlibLibArgs(const ArgList &Args,
+-                                  ArgStringList &CmdArgs) const {
+-  CXXStdlibType Type = GetCXXStdlibType(Args);
+-  bool Profiling = Args.hasArg(options::OPT_pg);
+-
+-  switch (Type) {
+-  case ToolChain::CST_Libcxx:
+-    CmdArgs.push_back(Profiling ? "-lc++_p" : "-lc++");
+-    break;
+-
+-  case ToolChain::CST_Libstdcxx:
+-    CmdArgs.push_back(Profiling ? "-lstdc++_p" : "-lstdc++");
+-    break;
+-  }
+-}
+-
+ Tool *FreeBSD::buildAssembler() const {
+   return new tools::freebsd::Assembler(*this);
+ }
+@@ -3249,8 +3240,6 @@
+     case llvm::Triple::ppc:
+     case llvm::Triple::ppc64:
+     case llvm::Triple::ppc64le:
+-    case llvm::Triple::sparc:
+-    case llvm::Triple::sparcv9:
+     case llvm::Triple::x86:
+     case llvm::Triple::x86_64:
+       return ToolChain::CST_Libcxx;
+@@ -3713,6 +3702,11 @@
    const std::string OSLibDir = getOSLibDir(Triple, Args);
-   const std::string MultiarchTriple = getMultiarchTriple(Triple, SysRoot);
+   const std::string MultiarchTriple = getMultiarchTriple(D, Triple, SysRoot);
  
 +  //- KEWB
 +  if (GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) {
-+      addPathIfExists(SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
++      addPathIfExists(D, SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
 +  }
 +
    // Add the multilib suffixed paths where they are available.
    if (GCCInstallation.isValid()) {
      const llvm::Triple &GCCTriple = GCCInstallation.getTriple();
-@@ -3292,6 +3304,11 @@
+@@ -3815,6 +3809,11 @@
    if (StringRef(D.Dir).startswith(SysRoot))
-     addPathIfExists(D.Dir + "/../lib", Paths);
+     addPathIfExists(D, D.Dir + "/../lib", Paths);
  
 +  //- KEWB
 +  if (GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) {
-+    addPathIfExists(SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
++    addPathIfExists(D, SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
 +  }
 +
-   addPathIfExists(SysRoot + "/lib", Paths);
-   addPathIfExists(SysRoot + "/usr/lib", Paths);
+   addPathIfExists(D, SysRoot + "/lib", Paths);
+   addPathIfExists(D, SysRoot + "/usr/lib", Paths);
  }
-@@ -3530,6 +3547,9 @@
+@@ -4057,6 +4056,9 @@
    // Check if libc++ has been enabled and provide its include paths if so.
    if (GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx) {
      const std::string LibCXXIncludePathCandidates[] = {
 +        //- KEWB
-+        getDriver().SysRoot + std::string(LLVM_PREFIX) + "/include/c++/v1",
++        DetectLibcxxIncludePath(getDriver().SysRoot + std::string(LLVM_PREFIX) + "/include/c++"),
 +
-         // The primary location is within the Clang installation.
-         // FIXME: We shouldn't hard code 'v1' here to make Clang future proof to
-         // newer ABI versions.
-@@ -3598,6 +3618,23 @@
+         DetectLibcxxIncludePath(getDriver().Dir + "/../include/c++"),
+ 
+         // We also check the system as for a long time this is the only place
+@@ -4122,6 +4124,23 @@
    }
  }
  
 +//- KEWB
 +void Linux::AddCXXStdlibLibArgs(const ArgList &Args,
-+                                    ArgStringList &CmdArgs) const {
++                                ArgStringList &CmdArgs) const {
 +  CXXStdlibType Type = GetCXXStdlibType(Args);
 +
 +  switch (Type) {
@@ -79,6 +111,6 @@
 +  }
 +}
 +
- bool Linux::isPIEDefault() const { return getSanitizerArgs().requiresPIE(); }
- 
- SanitizerMask Linux::getSupportedSanitizers() const {
+ void Linux::AddCudaIncludeArgs(const ArgList &DriverArgs,
+                                ArgStringList &CC1Args) const {
+   if (DriverArgs.hasArg(options::OPT_nocudainc))
