@@ -3,8 +3,8 @@
  Bob Steagall
  KEWB Enterprises
 ================================================================================
-This is the README file for the KEWB Clang 3.7.X build scripts.  In the
-following text, the version numbers will be referred to as 3.7.X or 37X,
+This is the README file for the KEWB Clang 3.8.X build scripts.  In the
+following text, the version numbers will be referred to as 3.8.X or 38X,
 depending on the usage and context.
 
 In order to run these scripts, the following prerequisites must be installed:
@@ -69,7 +69,7 @@ build process.  Each operation is a distinct step in that process.
 
 
 ----------------------------------------------
-4. HOW TO BUILD CLANG 3.7.X WITH THESE SCRIPTS
+4. HOW TO BUILD CLANG 3.8.X WITH THESE SCRIPTS
 
 The process is pretty simple:
 
@@ -82,7 +82,7 @@ The process is pretty simple:
 
  b. Customize the variables exported by clang-build-vars.sh.  In particular,
     you will need to customize the first variable at the top of that file,
-    CLANG_VERSION, to select the version of Clang 3.7.X to download and build.
+    CLANG_VERSION, to select the version of Clang 3.8.X to download and build.
 
     $ vi ./clang-build-vars.sh
 
@@ -116,15 +116,15 @@ The process is pretty simple:
 
 
 -----------------------------------------------
-5. HOW TO USE THE KEWB CUSTOM CLANG 3.7.X BUILD
+5. HOW TO USE THE KEWB CUSTOM CLANG 3.8.X BUILD
 
 Before using the compiler, some paths need to be set.  The simplest way to
-do this is source the "setenv-for-clang37X.sh" script that is installed.
+do this is source the "setenv-for-clang38X.sh" script that is installed.
 
- a. Source the script /usr/local/bin/setenv-for-clang-37X.sh, which was
+ a. Source the script /usr/local/bin/setenv-for-clang-38X.sh, which was
     installed in step 4.e or 4.f above.  For example,
 
-        $ source /usr/local/bin/setenv-for-clang37X.sh
+        $ source /usr/local/bin/setenv-for-clang38X.sh
 
 -- OR --
 
@@ -133,14 +133,14 @@ do this is source the "setenv-for-clang37X.sh" script that is installed.
     system default compiler is installed (which is usually in /usr/bin or
     /usr/local/bin).  For example,
 
-        $ export PATH=/usr/local/clang/3.7.X/bin:$PATH
+        $ export PATH=/usr/local/clang/3.8.X/bin:$PATH
 
  b. On Linux, you will also need to modify your LD_LIBRARY_PATH environment
     variable so that the $CLANG_INSTALL_PREFIX/lib, $GCC_INSTALL_PREFIX/lib,
     and $GCC_INSTALL_PREFIX/lib64 directories appear first in the path.  For
     example,
 
-        $ export LD_LIBRARY_PATH=/usr/local/clang/3.7.X/lib:\
+        $ export LD_LIBRARY_PATH=/usr/local/clang/3.8.X/lib:\
           /usr/local/gcc/6.1.0/lib:/usr/local/gcc/6.1.0/lib64:\
           $LD_LIBRARY_PATH
 
