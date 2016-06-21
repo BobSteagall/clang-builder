@@ -8,7 +8,7 @@ following text, the version numbers will be referred to as 3.7.X or 37X,
 depending on the usage and context.
 
 In order to run these scripts, the following prerequisites must be installed:
- a. CMAKE 2.8.12 or higher
+ a. CMake 2.8.12 or higher
  b. Python 2.7 or higher
 
 --------------------------------------------
@@ -24,8 +24,9 @@ In order to run these scripts, the following prerequisites must be installed:
 2. TOP-LEVEL SCRIPTS THAT PERFORM HIGH-LEVEL ACTIONS
 
   * build-clang.sh - This script will perform an entire build of Clang.  It
-    does so by running fetch-clang.sh, unpack-clang.sh, configure-clang.sh,
-    make-clang.sh, and the test scripts, in that order.
+    builds the compiler first, and then the LibC++ library.  The compiler
+    and library are each built by running fetch-clang.sh, unpack-clang.sh,
+    configure-clang.sh, and make-clang.sh, in that order.
 
   * stage-clang.sh - This script installs Clang into a staging location
     specified by the build variables script (clang-build-vars.sh).  This is
@@ -48,7 +49,7 @@ This set of scripts performs several basic operations that are part of the
 build process.  Each operation is a distinct step in that process.
 
   * fetch-clang.sh - This script downloads the required source tarballs from
-    LLVM mirror sites
+    LLVM mirror sites.
 
   * unpack-clang.sh - This script unpacks the tarballs, places everything in
     the correct relative locations, and then performs any required patching.
@@ -59,8 +60,9 @@ build process.  Each operation is a distinct step in that process.
     clang-build-vars.sh.
 
   * make-clang.sh - This script makes Clang from within the build subdirectory.
-    It runs with -j6 (i.e., up to 6 parallel processes), so if you don't
-    have 6 cores on your build system, you should change this value.
+    By default, tt runs with -j6 (i.e., up to 6 parallel processes); you can
+    change this value by modifying the CLANG_BUILD_THREADS_ARG variable defined
+    in the clang-build-vars.sh script described above.
 
   * clean-clang.sh - This script deletes the source, build, install staging,
     and package output directories.
@@ -82,7 +84,7 @@ The process is pretty simple:
     you will need to customize the first variable at the top of that file,
     CLANG_VERSION, to select the version of Clang 3.7.X to download and build.
 
-    $ vi ./clang-build-vars.sh  (only do this if really needed!)
+    $ vi ./clang-build-vars.sh
 
  c. Run the build-clang.sh script.
 
@@ -133,9 +135,14 @@ do this is source the "setenv-for-clang37X.sh" script that is installed.
 
         $ export PATH=/usr/local/clang/3.7.X/bin:$PATH
 
- b. You will also need to modify your LD_LIBRARY_PATH environment variable so
-    that the directories $CLANG_INSTALL_DIR/lib and $CLANG_INSTALL_DIR/lib64
-    appear first in the path.  For example,
+ b. On Linux, you will also need to modify your LD_LIBRARY_PATH environment
+    variable so that the $CLANG_INSTALL_PREFIX/lib, $GCC_INSTALL_PREFIX/lib,
+    and $GCC_INSTALL_PREFIX/lib64 directories appear first in the path.  For
+    example,
 
         $ export LD_LIBRARY_PATH=/usr/local/clang/3.7.X/lib:\
-          /usr/local/clang/3.7.X/lib64:$LD_LIBRARY_PATH
+          /usr/local/gcc/6.1.0/lib:/usr/local/gcc/6.1.0/lib64:\
+          $LD_LIBRARY_PATH
+
+    On FreeBSD, it suffices to prepend LD_LIBRARY_PATH with only the
+    $CLANG_INSTALL_PREFIX/lib directory.
