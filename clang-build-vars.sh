@@ -11,7 +11,7 @@
 ##  version is determined by checking out a branch of the "clang-builder"
 ##  repo, rather than changing it here.
 ##
-export CLANG_VERSION=3.8.0
+export CLANG_VERSION=3.9.0
 
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang or clang++ with the -v flag
@@ -32,22 +32,22 @@ export CLANG_INSTALL_PREFIX=$CLANG_INSTALL_ROOT/clang/$CLANG_VERSION
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=201606041000
+export CLANG_TIME_STAMP=201701081000
 
 ##- Customize these variables if you want to change the arguments passed
 ##  to make that specify the number of threads used to build Clang.
 ##
-export CLANG_BUILD_THREADS_ARG='-j6'
+export CLANG_BUILD_THREADS_ARG='-j4'
 
 ##- If building on Linux, customize these variables to specify the location
 ##  of the GCC partner on this platform.  The important thing is that the
 ##  variable GCC_INSTALL_PREFIX be defined -- it should have the same value
-##  as the --prefix flag used to configure the GCC installation. 
+##  as the --prefix flag used to configure the GCC installation.
 ##
 if [ `uname` == "Linux" ]
 then
-    GCC_VERSION=6.1.0
-    GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
+    export GCC_VERSION=6.2.0
+    export GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
 fi
 
 ##------------------------------------------------------------------------------

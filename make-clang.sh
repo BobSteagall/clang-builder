@@ -34,7 +34,7 @@ then
     PATH=$CLANG_BLD_DIR/Release/bin:$PATH
     clang++ -v
 
-    echo "Starting libc++ build..."
+    echo "Starting LIBC++ build..."
     cd $LIBCXX_BLD_DIR
     VERBOSE=1 $CLANG_MAKE
 

@@ -15,7 +15,5 @@ source ./clang-build-vars.sh
 
 ##- Run the LLVM and CLANG tests
 ##
-cd $CLANG_BLD_DIR/test
-$CLANG_MAKE -k
-cd $CLANG_BLD_DIR/tools/clang/test
-$CLANG_MAKE -k
+cd $CLANG_BLD_DIR
+make check-clang

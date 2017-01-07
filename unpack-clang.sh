@@ -86,12 +86,13 @@ then
         echo ""
         echo "Applying custom clang patches..."
 
-        cd autoconf
+        cd cmake
         if [ ! -e config.guess-orig ]
         then
             echo "Applying top-level llvm config.guess customization..."
             cp -p config.guess config.guess-orig
             cp $TOP_DIR/custom-config-guess.sh ./config.guess
+            chmod 755 ./config.guess*
         fi
 
         cd $CLANG_SRC_DIR/tools/clang/lib/Driver
@@ -116,7 +117,7 @@ then
     echo ""
 fi
 
-##- Unpack and fix up LIBCXX tarball.
+##- Unpack and fix up LIBC++ tarball.
 ##
 if [ -n "$DO_CXXLIB" ]
 then

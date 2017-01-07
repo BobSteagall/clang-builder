@@ -18,7 +18,7 @@ source ./clang-build-vars.sh
 ##
 if [ -n "$DO_CLANG" ]
 then
-    echo -n "Checking for existing clang build directory $CLANG_BLD_DIR... "
+    echo -n "Checking for existing CLANG build directory $CLANG_BLD_DIR... "
     if [ ! -e $CLANG_BLD_DIR ]
     then
         echo ""
@@ -31,11 +31,11 @@ then
     ##- Run the CLANG configure script using our customizations.
     ##
     cd $CLANG_BLD_DIR
-    echo -n "Checking for CLANG configuration log in $CLANG_BLD_DIR... "
-    if [ ! -e config.log ]
+    echo -n "Checking for CLANG CMake cache in $CLANG_BLD_DIR... "
+    if [ ! -e CMakeCache.txt ]
     then
         echo ""
-        echo -n "Running CLANG configure script "
+        echo -n "Configuring CLANG build with CMake... "
 
         ##- Now run the configue script.  There are several site-specific extra
         ##  options that are set, and here is why:
@@ -62,6 +62,13 @@ then
         if [ "$CLANG_PLATFORM" == "FreeBSD" ]
         then
             echo "for FreeBSD... "
+            CXX=/usr/bin/g++                                    \
+            CC=/usr/bin/gcc                                     \
+            cmake $CLANG_SRC_DIR -G "Unix Makefiles"            \
+                -DCMAKE_BUILD_TYPE=Release                      \
+                -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX    \
+                -DLLVM_ENABLE_WARNINGS=OFF
+
             $CLANG_SRC_DIR/configure            \
                 --prefix=$CLANG_INSTALL_PREFIX  \
                 --disable-assertions            \
@@ -76,18 +83,23 @@ then
         elif [ "$CLANG_PLATFORM" == "Linux" ]
         then
             echo "for Linux... "
-            $CLANG_SRC_DIR/configure                                        \
-                --prefix=$CLANG_INSTALL_PREFIX                              \
-                --disable-assertions                                        \
-                --enable-optimized                                          \
-                --enable-targets=host                                       \
-                --enable-cxx11                                              \
-                --with-gcc-toolchain=$GCC_INSTALL_PREFIX                    \
-                --with-extra-ld-options=-Wl,-R,$GCC_INSTALL_PREFIX/lib64    \
-                CXX=$GCC_INSTALL_PREFIX/bin/g++                             \
-                CC=$GCC_INSTALL_PREFIX/bin/gcc                              \
-                CPP=$GCC_INSTALL_PREFIX/bin/cpp                             \
-                CXXFLAGS="-Wno-unused-function -Wno-unused-local-typedefs -Wno-unused-but-set-variable -Wno-overloaded-virtual -Wno-sign-compare"
+
+            GCC_CXXLIBDIR="$GCC_INSTALL_PREFIX/lib64"
+            GCC_CXXFLAGS="-Wno-unused-function -Wno-unused-local-typedefs   \
+                          -Wno-unused-but-set-variable                      \
+                          -Wno-overloaded-virtual -Wno-sign-compare         \
+                          -Wno-strict-aliasing -Wno-pedantic"
+            GCC_CLAGS="-Wno-implicit-function-declaration"
+
+            CXX=$GCC_INSTALL_PREFIX/bin/g++                                     \
+            CC=$GCC_INSTALL_PREFIX/bin/gcc                                      \
+            cmake $CLANG_SRC_DIR -G "Unix Makefiles"                            \
+                -DCMAKE_BUILD_TYPE=Release                                      \
+                -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX                    \
+                -DCMAKE_CXX_LINK_FLAGS="-Wl,-R,$GCC_CXXLIBDIR -L$GCC_CXXLIBDIR" \
+                -DGCC_INSTALL_PREFIX=$GCC_INSTALL_PREFIX                        \
+                -DLLVM_ENABLE_WARNINGS=OFF
+
         fi
     else
         echo "found"
@@ -99,23 +111,23 @@ then
     echo ""
 fi
 
-##- Configure LIBCXX for compilation.
+##- Configure LIBC++ for compilation.
 ##
 cd $TOP_DIR
 if [ -n "$DO_CXXLIB" ]
 then
-    if [ ! -e $CLANG_BLD_DIR/Release/bin/clang ]
+    if [ ! -e $CLANG_BLD_DIR/bin/clang ]
     then
-        echo "missing build clang/clang++...  need to re-make clang..."
+        echo "missing built clang/clang++...  you need to re-make clang..."
         exit 1
     fi
 
     cd $LIBCXX_BLD_DIR
-    echo -n "Checking for libc++ CMake cache in $LIBCXX_BLD_DIR..."
+    echo -n "Checking for LIBC++ CMake cache in $LIBCXX_BLD_DIR..."
     if [ ! -e CMakeCache.txt ]
     then
         echo ""
-        echo "Running libc++ configure script... "
+        echo "Configuring LIBC++ build with CMake... "
 
         ##- Now run the configue script.  There are several site-specific
         ##  extra options that are set, and here is why:
@@ -138,8 +150,8 @@ then
         if [ "$CLANG_PLATFORM" == "FreeBSD" ]
         then
             echo "for FreeBSD... "
-            CC=$CLANG_BLD_DIR/Release/bin/clang                         \
-            CXX=$CLANG_BLD_DIR/Release/bin/clang++                      \
+            CC=$CLANG_BLD_DIR/bin/clang                                 \
+            CXX=$CLANG_BLD_DIR/bin/clang++                              \
             cmake -G "Unix Makefiles"                                   \
                 -DLIBCXX_CXX_ABI=libcxxrt                               \
                 -DLIBCXX_CXX_ABI_INCLUDE_PATHS="/usr/include/c++/v1"    \
@@ -164,8 +176,8 @@ then
 
             ##- Build the makefile that makes libc++.
             ##
-            CC=$CLANG_BLD_DIR/Release/bin/clang                 \
-            CXX=$CLANG_BLD_DIR/Release/bin/clang++              \
+            CC=$CLANG_BLD_DIR/bin/clang                         \
+            CXX=$CLANG_BLD_DIR/bin/clang++                      \
             cmake -G "Unix Makefiles"                           \
                 -DLIBCXX_CXX_ABI=libstdc++                      \
                 -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$GCC_INC_PATH"  \
@@ -178,7 +190,7 @@ then
             ##  it is, we're going to insert conditional compilation directives to
             ##  ensure that the Clang compiler does not see this definition.  This
             ##  fixup can only be performed after the cmake command above, which is
-            ##  why it's here instead of in unpack-clang.ch.
+            ##  why it's here instead of the unpack-clang.sh script.
             ##
             cd $LIBCXX_BLD_DIR/include
             LINE1=`egrep -n 'inline.+__pbase_type_info[[:space:]]*::' cxxabi.h`
@@ -196,7 +208,7 @@ then
         fi
     else
         echo " found"
-        echo "Configure has already been run for libc++"
+        echo "Configure has already been run for LIBC++"
     fi
 
     echo ""
