@@ -75,12 +75,12 @@ export CLANG_STAGEDIR=$TOP_DIR/dist
 
 if [ "$CLANG_PLATFORM" == "FreeBSD" ]
 then
-    CLANG_MAKE=gmake
+    export CLANG_MAKE=gmake
 
 elif [ "$CLANG_PLATFORM" == "Linux" ]
 then
-    GCC_BIN=$GCC_INSTALL_PREFIX/bin/gcc
-    CLANG_MAKE=make
+    export GCC_BIN=$GCC_INSTALL_PREFIX/bin/gcc
+    export CLANG_MAKE=make
 else
     echo "Unknown build platform!"
     exit 1
@@ -90,14 +90,14 @@ if [ -z "$NO_PARSE_OPTS" ]
 then
     if [ $# == "0" ]
     then
-        DO_CLANG=YES
-        DO_CXXLIB=YES
+        export DO_CLANG=YES
+        export DO_CXXLIB=YES
     else
         while getopts ":clh" opt
         do
             case $opt in
-                c ) DO_CLANG=YES ;;
-                l ) DO_CXXLIB=YES ;;
+                c ) export DO_CLANG=YES ;;
+                l ) export DO_CXXLIB=YES ;;
                 h ) echo "usage: $0 [-c] [-l]"
                     exit 1 ;;
                 * ) echo "usage: $0 [-c] [-l]"
@@ -106,3 +106,4 @@ then
         done
     fi
 fi
+
