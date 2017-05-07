@@ -31,7 +31,7 @@ fi
 cd $TOP_DIR
 if [ -n "$DO_CXXLIB" ]
 then
-    PATH=$CLANG_BLD_DIR/Release/bin:$PATH
+    PATH=$CLANG_BLD_DIR/bin:$PATH
     clang++ -v
 
     echo "Starting LIBC++ build..."

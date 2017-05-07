@@ -1,10 +1,10 @@
 ================================================================================
- 2017-01-08
+ 2017-05-06
  Bob Steagall
  KEWB Enterprises
 ================================================================================
-This is the README file for the KEWB Clang 3.9.X build scripts.  In the
-following text, the version numbers will be referred to as 3.9.X or 39X,
+This is the README file for the KEWB Clang 4.0.X build scripts.  In the
+following text, the version numbers will be referred to as 4.0.X or 40X,
 depending on the usage and context.
 
 In order to run these scripts, the following prerequisites must be installed:
@@ -69,20 +69,20 @@ build process.  Each operation is a distinct step in that process.
 
 
 ----------------------------------------------
-4. HOW TO BUILD CLANG 3.9.X WITH THESE SCRIPTS
+4. HOW TO BUILD CLANG 4.0.X WITH THESE SCRIPTS
 
 The process is pretty simple:
 
- a. Clone the git repo and checkout the clang39 branch.
+ a. Clone the git repo and checkout the clang40 branch.
 
     $ cd <build_dir>
     $ git clone git@gitlab.com/BobSteagall/clang-builder.git
     $ cd <build_dir>/clang-builder
-    $ git checkout clang39
+    $ git checkout clang40
 
  b. Customize the variables exported by clang-build-vars.sh.  In particular,
     you will need to customize the first variable at the top of that file,
-    CLANG_VERSION, to select the version of Clang 3.9.X to download and build.
+    CLANG_VERSION, to select the version of Clang 4.0.X to download and build.
 
     $ vi ./clang-build-vars.sh
 
@@ -105,6 +105,13 @@ The process is pretty simple:
     $ cd /
     $ sudo tar -zxvf <build_dir>/clang-builder/packages/kewb-clang-*.tgz
 
+    If you are satisfied that everything is working correctly, then at some
+    point you'll want to set ownership of the un-tarred files to root:
+
+    $ cd /usr/local
+    $ sudo chown -R root:root clang/4.0.X/
+    $ sudo chown root:root bin/*clang40X*
+
  f. If you want to create an RPM for subsequent installations:
 
     $ ./make-clang-rpm.sh -v
@@ -116,15 +123,15 @@ The process is pretty simple:
 
 
 -----------------------------------------------
-5. HOW TO USE THE KEWB CUSTOM CLANG 3.9.X BUILD
+5. HOW TO USE THE KEWB CUSTOM CLANG 4.0.X BUILD
 
 Before using the compiler, some paths need to be set.  The simplest way to
-do this is source the "setenv-for-clang39X.sh" script that is installed.
+do this is source the "setenv-for-clang40X.sh" script that is installed.
 
- a. Source the script /usr/local/bin/setenv-for-clang-39X.sh, which was
+ a. Source the script /usr/local/bin/setenv-for-clang-40X.sh, which was
     installed in step 4.e or 4.f above.  For example,
 
-        $ source /usr/local/bin/setenv-for-clang39X.sh
+        $ source /usr/local/bin/setenv-for-clang40X.sh
 
 -- OR --
 
@@ -133,15 +140,15 @@ do this is source the "setenv-for-clang39X.sh" script that is installed.
     system default compiler is installed (which is usually in /usr/bin or
     /usr/local/bin).  For example,
 
-        $ export PATH=/usr/local/clang/3.9.X/bin:$PATH
+        $ export PATH=/usr/local/clang/4.0.X/bin:$PATH
 
  b. On Linux, you will also need to modify your LD_LIBRARY_PATH environment
     variable so that the $CLANG_INSTALL_PREFIX/lib, $GCC_INSTALL_PREFIX/lib,
     and $GCC_INSTALL_PREFIX/lib64 directories appear first in the path.  For
     example,
 
-        $ export LD_LIBRARY_PATH=/usr/local/clang/3.9.X/lib:\
-          /usr/local/gcc/6.1.0/lib:/usr/local/gcc/6.1.0/lib64:\
+        $ export LD_LIBRARY_PATH=/usr/local/clang/4.0.X/lib:\
+          /usr/local/gcc/6.3.0/lib:/usr/local/gcc/6.3.0/lib64:\
           $LD_LIBRARY_PATH
 
     On FreeBSD, it suffices to prepend LD_LIBRARY_PATH with only the

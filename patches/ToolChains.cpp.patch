@@ -1,51 +1,31 @@
---- ToolChains.cpp-orig	2017-01-07 10:09:11.124740214 -0500
-+++ ToolChains.cpp	2017-01-07 12:59:52.822624709 -0500
-@@ -3430,8 +3430,11 @@
+--- ToolChains.cpp-orig	2017-01-10 16:13:08.000000000 -0500
++++ ToolChains.cpp	2017-05-06 15:05:26.946878223 -0400
+@@ -3672,8 +3672,11 @@
         Triple.getArch() == llvm::Triple::ppc) &&
        D.getVFS().exists(getDriver().SysRoot + "/usr/lib32/crt1.o"))
      getFilePaths().push_back(getDriver().SysRoot + "/usr/lib32");
 -  else
 +  else {
 +    //- KEWB
-+    getFilePaths().push_back(getDriver().SysRoot + std::string(LLVM_PREFIX) + "/lib");
++    getFilePaths().push_back(getDriver().Dir + "/../lib");
      getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
 +  }
  }
  
  ToolChain::CXXStdlibType FreeBSD::GetDefaultCXXStdlibType() const {
-@@ -3448,6 +3451,10 @@
- 
-   switch (GetCXXStdlibType(DriverArgs)) {
-   case ToolChain::CST_Libcxx:
-+    //- KEWB
-+    addSystemInclude(DriverArgs, CC1Args,
-+                     getDriver().SysRoot + std::string(LLVM_PREFIX) +
-+                     "/include/c++/v1");
-     addSystemInclude(DriverArgs, CC1Args,
-                      getDriver().SysRoot + "/usr/include/c++/v1");
-     break;
-@@ -4061,6 +4068,11 @@
+@@ -4161,6 +4164,11 @@
    const std::string OSLibDir = getOSLibDir(Triple, Args);
    const std::string MultiarchTriple = getMultiarchTriple(D, Triple, SysRoot);
  
 +  //- KEWB
 +  if (GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) {
-+    addPathIfExists(D, SysRoot + std::string(LLVM_PREFIX) + "/lib", Paths);
++    addPathIfExists(D, getDriver().Dir + "/../lib", Paths);
 +  }
 +
    // Add the multilib suffixed paths where they are available.
    if (GCCInstallation.isValid()) {
      const llvm::Triple &GCCTriple = GCCInstallation.getTriple();
-@@ -4526,6 +4538,8 @@
-   // Check if libc++ has been enabled and provide its include paths if so.
-   if (GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx) {
-     const std::string LibCXXIncludePathCandidates[] = {
-+        //- KEWB
-+        DetectLibcxxIncludePath(getDriver().SysRoot + std::string(LLVM_PREFIX) + "/include/c++"),
-         DetectLibcxxIncludePath(getDriver().Dir + "/../include/c++"),
-         // If this is a development, non-installed, clang, libcxx will
-         // not be found at ../include/c++ but it likely to be found at
-@@ -4592,6 +4606,23 @@
+@@ -4695,6 +4703,23 @@
    }
  }
  
@@ -68,4 +48,4 @@
 +
  void Linux::AddCudaIncludeArgs(const ArgList &DriverArgs,
                                 ArgStringList &CC1Args) const {
-   if (DriverArgs.hasArg(options::OPT_nocudainc))
+   CudaInstallation.AddCudaIncludeArgs(DriverArgs, CC1Args);
