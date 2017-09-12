@@ -174,6 +174,26 @@ then
 
             echo "GCC include path for ABI is: $GCC_INC_PATH"
 
+            ##- Check to see if this is a newer GCC that has the ABI header file
+            ##  <bits/cxxabi_init_exception.h>.  If it does, then one of the libc++
+            ##  CMake files needs patching.
+            ##
+            GCC_CXXABI_INITX=`find $GCC_INSTALL_PREFIX -name 'cxxabi_init_exception.h'`
+
+            if [ -n "$GCC_CXXABI_INITX" ];
+            then
+                pushd $LIBCXX_SRC_DIR/cmake/Modules
+                LINE1=`egrep -n 'bits/cxxabi_forced.h' HandleLibCXXABI.cmake`
+
+                if [ -n "$LINE1" ]
+                then
+                    LINE1=`echo $LINE1 | cut -f 1 -d ':'`
+                    cp -pv HandleLibCXXABI.cmake HandleLibCXXABI.cmake-orig
+                    sed -i "${LINE1} s|$| bits/cxxabi_init_exception.h|" HandleLibCXXABI.cmake
+                fi
+                popd
+            fi
+
             ##- Build the makefile that makes libc++.
             ##
             CC=$CLANG_BLD_DIR/bin/clang                         \
@@ -186,7 +206,7 @@ then
                 $LIBCXX_SRC_DIR
 
             ##- Check to see if this is a newer GCC that defines the member function
-            ##  __pbase_type_info::__pointer_catch() in the cxxabi.h header file.  If
+            ##  __pbase_type_info::__pointer_catch() in the cxxabi.h header file. If
             ##  it is, we're going to insert conditional compilation directives to
             ##  ensure that the Clang compiler does not see this definition.  This
             ##  fixup can only be performed after the cmake command above, which is
