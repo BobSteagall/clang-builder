@@ -192,7 +192,7 @@ then
             ##  fixup can only be performed after the cmake command above, which is
             ##  why it's here instead of the unpack-clang.sh script.
             ##
-            cd $LIBCXX_BLD_DIR/include
+            cd $LIBCXX_BLD_DIR/include/c++/v1
             LINE1=`egrep -n 'inline.+__pbase_type_info[[:space:]]*::' cxxabi.h`
 
             if [ -n "$LINE1" ]
@@ -204,6 +204,7 @@ then
                 sed "${LINE2}i #endif"            cxxabi.h     > cxxabi.h.tmp
                 sed "${LINE1}i #ifndef __clang__" cxxabi.h.tmp > cxxabi.h
                 rm cxxabi.h.tmp
+                cp -pv cxxabi.h $LIBCXX_BLD_DIR/include/c++-build
             fi
         fi
     else
