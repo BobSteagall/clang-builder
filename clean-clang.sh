@@ -22,8 +22,8 @@ rm -rf ./packages
 if [ -n "$DO_CLANG" ]
 then
     echo -n "removing LLVM and CLANG source and build directories... "
-    sudo rm -rf $CLANG_SRC_DIR
-    sudo rm -rf $CLANG_BLD_DIR
+    rm -rf $CLANG_SRC_DIR
+    rm -rf $CLANG_BLD_DIR
     echo "done"
 fi
 
@@ -33,8 +33,8 @@ cd $TOP_DIR
 if [ -n "$DO_CXXLIB" ]
 then
     echo -n "removing libc++ source and build directories... "
-    sudo rm -rf $LIBCXX_SRC_DIR
-    sudo rm -rf $LIBCXX_BLD_DIR
+    rm -rf $LIBCXX_SRC_DIR
+    rm -rf $LIBCXX_BLD_DIR
     echo "done"
 fi
 

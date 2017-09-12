@@ -90,9 +90,14 @@ fi
 cd $CLANG_STAGEDIR
 find $CLANG_STAGEDIR/$CLANG_INSTALL_RELDIR -exec touch -h -t $CLANG_TIME_STAMP {} \+
 
-cd $CLANG_STAGEDIR/usr/local/bin
-touch -h -t $CLANG_TIME_STAMP clang$CLANG_TAG
-touch -h -t $CLANG_TIME_STAMP clang++$CLANG_TAG
-touch -h -t $CLANG_TIME_STAMP setenv-for-clang$CLANG_TAG.sh
-touch -h -t $CLANG_TIME_STAMP restore-default-paths-clang$CLANG_TAG.sh
+if [ -n "$DO_CLANG" ]
+then
+    cd $CLANG_STAGEDIR/usr/local/bin
+    touch -h -t $CLANG_TIME_STAMP clang$CLANG_TAG
+    touch -h -t $CLANG_TIME_STAMP clang++$CLANG_TAG
+    touch -h -t $CLANG_TIME_STAMP setenv-for-clang$CLANG_TAG.sh
+    touch -h -t $CLANG_TIME_STAMP restore-default-paths-clang$CLANG_TAG.sh
+fi
+
 echo ""
+

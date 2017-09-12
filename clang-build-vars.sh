@@ -32,7 +32,7 @@ export CLANG_INSTALL_PREFIX=$CLANG_INSTALL_ROOT/clang/$CLANG_VERSION
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=201705061000
+export CLANG_TIME_STAMP=201709081000
 
 ##- Customize these variables if you want to change the arguments passed
 ##  to make that specify the number of threads used to build Clang.
@@ -92,14 +92,16 @@ then
     then
         export DO_CLANG=YES
         export DO_CXXLIB=YES
+        export DO_TEST=YES
     else
-        while getopts ":clh" opt
+        while getopts ":clhn" opt
         do
             case $opt in
                 c ) export DO_CLANG=YES ;;
                 l ) export DO_CXXLIB=YES ;;
                 h ) echo "usage: $0 [-c] [-l]"
                     exit 1 ;;
+                n ) export DO_TEST= ;;
                 * ) echo "usage: $0 [-c] [-l]"
                     exit 1 ;;
             esac
