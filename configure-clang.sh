@@ -98,6 +98,7 @@ then
                 -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX                    \
                 -DCMAKE_CXX_LINK_FLAGS="-Wl,-R,$GCC_CXXLIBDIR -L$GCC_CXXLIBDIR" \
                 -DGCC_INSTALL_PREFIX=$GCC_INSTALL_PREFIX                        \
+                -DCLANG_VENDOR="$CLANG_VENDOR"                                  \
                 -DLLVM_ENABLE_WARNINGS=OFF
 
         fi
