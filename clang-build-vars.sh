@@ -12,7 +12,7 @@
 ##  repo, rather than changing it here.
 ##
 export CLANG_VERSION=4.0.X
-
+set -x
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang or clang++ with the -v flag
 ##  ("clang -v").
@@ -94,15 +94,16 @@ then
         export DO_CXXLIB=YES
         export DO_TEST=YES
     else
-        while getopts ":clhn" opt
+        while getopts ":clhtT" opt
         do
             case $opt in
                 c ) export DO_CLANG=YES ;;
                 l ) export DO_CXXLIB=YES ;;
-                h ) echo "usage: $0 [-c] [-l]"
+                h ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
-                n ) export DO_TEST= ;;
-                * ) echo "usage: $0 [-c] [-l]"
+                t ) export DO_TEST=YES ;;
+                T ) export DO_TEST= ;;
+                * ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
             esac
         done
