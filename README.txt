@@ -62,7 +62,7 @@ build process.  Each operation is a distinct step in that process.
     clang-build-vars.sh.
 
   * make-clang.sh - This script makes Clang from within the build subdirectory.
-    By default, tt runs with -j6 (i.e., up to 6 parallel processes); you can
+    By default, it runs with -j6 (i.e., up to 6 parallel processes); you can
     change this value by modifying the CLANG_BUILD_THREADS_ARG variable defined
     in the clang-build-vars.sh script described above.
 
@@ -115,6 +115,13 @@ The process is pretty simple:
     or, alternatively:
 
     $ sudo tar -zxvf ./clang-builder/packages/kewb-clang39X*.tgz -C /
+
+    If you are satisfied that everything is working correctly, then at some
+    point you'll want to set ownership of the un-tarred files to root:
+
+    $ cd /usr/local
+    $ sudo chown -R root:root clang/3.9.X/
+    $ sudo chown root:root bin/*clang39X*
 
  f. If you want to create an RPM for subsequent installations:
 
