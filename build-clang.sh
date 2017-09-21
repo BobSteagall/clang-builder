@@ -36,4 +36,7 @@ then
     ./make-clang.sh -l
 fi
 
-./test-clang.sh
+if [ -n "$DO_TEST" ]
+then
+    ./test-clang.sh
+fi
