@@ -17,7 +17,7 @@ export CLANG_VERSION=3.8.X
 ##  is displayed when a user invokes clang or clang++ with the -v flag
 ##  ("clang -v").
 ##
-export CLANG_VENDOR="(KEWB Enterprises Build)"
+export CLANG_VENDOR="(KEWB Computing Build)"
 
 ##- Customize this variable to define the middle substring in the Clang
 ##  build triple.
@@ -42,7 +42,7 @@ export CLANG_BUILD_THREADS_ARG='-j6'
 ##- If building on Linux, customize these variables to specify the location
 ##  of the GCC partner on this platform.  The important thing is that the
 ##  variable GCC_INSTALL_PREFIX be defined -- it should have the same value
-##  as the --prefix flag used to configure the GCC installation. 
+##  as the --prefix flag used to configure the GCC installation.
 ##
 if [ `uname` == "Linux" ]
 then
@@ -93,14 +93,16 @@ then
         DO_CLANG=YES
         DO_CXXLIB=YES
     else
-        while getopts ":clh" opt
+        while getopts ":clhtT" opt
         do
             case $opt in
-                c ) DO_CLANG=YES ;;
-                l ) DO_CXXLIB=YES ;;
-                h ) echo "usage: $0 [-c] [-l]"
+                c ) export DO_CLANG=YES ;;
+                l ) export DO_CXXLIB=YES ;;
+                h ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
-                * ) echo "usage: $0 [-c] [-l]"
+                t ) export DO_TEST=YES ;;
+                T ) export DO_TEST= ;;
+                * ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
             esac
         done
