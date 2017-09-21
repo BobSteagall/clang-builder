@@ -17,7 +17,7 @@ export CLANG_VERSION=3.9.X
 ##  is displayed when a user invokes clang or clang++ with the -v flag
 ##  ("clang -v").
 ##
-export CLANG_VENDOR="(KEWB Enterprises Build)"
+export CLANG_VENDOR="(KEWB Computing Build)"
 
 ##- Customize this variable to define the middle substring in the Clang
 ##  build triple.
@@ -37,7 +37,7 @@ export CLANG_TIME_STAMP=201701081000
 ##- Customize these variables if you want to change the arguments passed
 ##  to make that specify the number of threads used to build Clang.
 ##
-export CLANG_BUILD_THREADS_ARG='-j4'
+export CLANG_BUILD_THREADS_ARG='-j6'
 
 ##- If building on Linux, customize these variables to specify the location
 ##  of the GCC partner on this platform.  The important thing is that the
@@ -93,14 +93,16 @@ then
         export DO_CLANG=YES
         export DO_CXXLIB=YES
     else
-        while getopts ":clh" opt
+        while getopts ":clhtT" opt
         do
             case $opt in
                 c ) export DO_CLANG=YES ;;
                 l ) export DO_CXXLIB=YES ;;
-                h ) echo "usage: $0 [-c] [-l]"
+                h ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
-                * ) echo "usage: $0 [-c] [-l]"
+                t ) export DO_TEST=YES ;;
+                T ) export DO_TEST= ;;
+                * ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
             esac
         done

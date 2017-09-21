@@ -1,15 +1,17 @@
 ================================================================================
- 2017-01-08
+ 2017-09-20
  Bob Steagall
- KEWB Enterprises
+ KEWB Computing
 ================================================================================
 This is the README file for the KEWB Clang 3.9.X build scripts.  In the
 following text, the version numbers will be referred to as 3.9.X or 39X,
 depending on the usage and context.
 
 In order to run these scripts, the following prerequisites must be installed:
- a. CMake 3.4.3 or higher
- b. Python 2.7 or higher
+ a. lsb_release on Linux
+ b. the typical GNU build tools
+ c. CMake 3.4.3 or higher
+ d. Python 2.7 or higher
 
 --------------------------------------------
 1. SCRIPTS THAT PROVIDE CUSTOM BUILD OPTIONS
@@ -90,6 +92,11 @@ The process is pretty simple:
 
     $ ./build-clang.sh | tee build.log
 
+    This command will build Clang and run the various unit tests that come
+    with the distribution.  To build without running the tests, you can use:
+
+    $ ./build-clang.sh -T | tee build.log
+
  d. If the build succeeds, and you are satisfied with the test results, run
     the stage-clang.sh script to create the installation staging area.
 
@@ -103,7 +110,11 @@ The process is pretty simple:
     the tarball:
 
     $ cd /
-    $ sudo tar -zxvf <build_dir>/clang-builder/packages/kewb-clang-*.tgz
+    $ sudo tar -zxvf <build_dir>/clang-builder/packages/kewb-clang39X*.tgz
+
+    or, alternatively:
+
+    $ sudo tar -zxvf ./clang-builder/packages/kewb-clang39X*.tgz -C /
 
  f. If you want to create an RPM for subsequent installations:
 
