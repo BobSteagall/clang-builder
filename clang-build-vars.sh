@@ -12,7 +12,7 @@
 ##  repo, rather than changing it here.
 ##
 export CLANG_VERSION=4.0.X
-set -x
+
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang or clang++ with the -v flag
 ##  ("clang -v").
