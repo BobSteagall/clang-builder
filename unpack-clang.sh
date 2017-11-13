@@ -95,14 +95,18 @@ then
             chmod 755 ./config.guess*
         fi
 
-        cd $CLANG_SRC_DIR/tools/clang/lib/Driver
+        cd $CLANG_SRC_DIR/tools/clang/lib/Driver/ToolChains
         if [ ! -e ToolChains.cpp-orig ]
         then
-            echo "Applying compiler driver patch..."
-            cp -pv ToolChains.h ToolChains.h-orig
-            patch ToolChains.h $TOP_DIR/patches/ToolChains.h.patch
-            cp -pv ToolChains.cpp ToolChains.cpp-orig
-            patch ToolChains.cpp $TOP_DIR/patches/ToolChains.cpp.patch
+            echo "Applying compiler driver patches..."
+            cp -pv Linux.h Linux.h-orig
+            patch Linux.h $TOP_DIR/patches/Linux.h.patch
+
+            cp -pv Linux.cpp Linux.cpp-orig
+            patch Linux.cpp $TOP_DIR/patches/Linux.cpp.patch
+
+            cp -pv FreeBSD.cpp FreeBSD.cpp-orig
+            patch FreeBSD.cpp $TOP_DIR/patches/FreeBSD.cpp.patch
         fi
 
         echo "Saving status..."
@@ -134,14 +138,6 @@ then
         SDIR=`ls`
         mv -vf $SDIR $LIBCXX_SRC_DIR
         rm -rf *
-
-        cd $LIBCXX_SRC_DIR/test
-
-        if [ "$CLANG_PLATFORM" == "Linux" ] && [ ! -e testit-orig ]
-        then
-            cp -pv testit testit-orig
-            patch testit $TOP_DIR/patches/testit.patch
-        fi
     else
         echo " already exists"
     fi

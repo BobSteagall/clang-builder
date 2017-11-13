@@ -1,6 +1,6 @@
---- ToolChains.h-orig	2017-01-05 11:52:29.000000000 -0500
-+++ ToolChains.h	2017-05-06 12:34:20.938746407 -0400
-@@ -875,6 +875,11 @@
+--- Linux.h-orig	2017-03-07 20:02:16.000000000 -0500
++++ Linux.h	2017-10-06 12:31:58.316514403 -0400
+@@ -31,6 +31,11 @@
    void addLibStdCxxIncludePaths(
        const llvm::opt::ArgList &DriverArgs,
        llvm::opt::ArgStringList &CC1Args) const override;

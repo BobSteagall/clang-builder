@@ -1,0 +1,15 @@
+--- FreeBSD.cpp-orig	2017-03-07 20:02:16.000000000 -0500
++++ FreeBSD.cpp	2017-10-06 12:57:11.993376312 -0400
+@@ -319,8 +319,11 @@
+        Triple.getArch() == llvm::Triple::ppc) &&
+       D.getVFS().exists(getDriver().SysRoot + "/usr/lib32/crt1.o"))
+     getFilePaths().push_back(getDriver().SysRoot + "/usr/lib32");
+-  else
++  else {
++    //- KEWB
++    getFilePaths().push_back(getDriver().Dir + "/../lib");
+     getFilePaths().push_back(getDriver().SysRoot + "/usr/lib");
++  }
+ }
+ 
+ ToolChain::CXXStdlibType FreeBSD::GetDefaultCXXStdlibType() const {

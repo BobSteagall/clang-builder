@@ -9,7 +9,7 @@
 ##
 export TOP_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd $TOP_DIR
-
+set -x
 ##- Get the CLANG-related variables and command-line options for this build.
 ##
 source ./clang-build-vars.sh
@@ -204,6 +204,7 @@ then
                 -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$GCC_INC_PATH"  \
                 -DCMAKE_BUILD_TYPE=Release                      \
                 -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX    \
+                -DLIBCXX_INCLUDE_TESTS=ON                       \
                 $LIBCXX_SRC_DIR
 
             ##- Check to see if this is a newer GCC that defines the member function
@@ -225,7 +226,7 @@ then
                 sed "${LINE2}i #endif"            cxxabi.h     > cxxabi.h.tmp
                 sed "${LINE1}i #ifndef __clang__" cxxabi.h.tmp > cxxabi.h
                 rm cxxabi.h.tmp
-                cp -pv cxxabi.h $LIBCXX_BLD_DIR/include/c++-build
+                cp -pv cxxabi.h $LIBCXX_BLD_DIR/include/c++build
             fi
         fi
     else
