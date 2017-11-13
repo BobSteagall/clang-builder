@@ -8,4 +8,5 @@ libcxxabi-*
 dist
 packages
 tarballs
+tmp
 build*.log*
