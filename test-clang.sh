@@ -24,12 +24,12 @@ fi
 if [ -n "$DO_CLANG" ]
 then
     cd $CLANG_BLD_DIR
-    $CLANG_MAKE check-clang $CLANG_BUILD_THREADS_ARG
+    $CLANG_MAKE check-clang -k $CLANG_BUILD_THREADS_ARG
 fi
 
 if [ -n "$DO_CXXLIB" ]
 then
     cd $LIBCXX_BLD_DIR
-    $CLANG_MAKE check-libcxx $CLANG_BUILD_THREADS_ARG
+    $CLANG_MAKE check-libcxx -k $CLANG_BUILD_THREADS_ARG
 fi
 

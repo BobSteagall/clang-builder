@@ -9,7 +9,7 @@
 ##
 export TOP_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd $TOP_DIR
-set -x
+
 ##- Get the CLANG-related variables and command-line options for this build.
 ##
 source ./clang-build-vars.sh
@@ -205,6 +205,7 @@ then
                 -DCMAKE_BUILD_TYPE=Release                      \
                 -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX    \
                 -DLIBCXX_INCLUDE_TESTS=ON                       \
+                -DLLVM_PATH="$CLANG_SRC_DIR"                    \
                 $LIBCXX_SRC_DIR
 
             ##- Check to see if this is a newer GCC that defines the member function
