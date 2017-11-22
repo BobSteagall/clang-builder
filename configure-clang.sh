@@ -158,6 +158,7 @@ then
                 -DLIBCXX_CXX_ABI_INCLUDE_PATHS="/usr/include/c++/v1"    \
                 -DCMAKE_BUILD_TYPE=Release                              \
                 -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX            \
+                -DLLVM_PATH="$CLANG_SRC_DIR"                            \
                 $LIBCXX_SRC_DIR
 
         elif [ "$CLANG_PLATFORM" == "Linux" ]
