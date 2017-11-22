@@ -205,6 +205,7 @@ then
                 -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$GCC_INC_PATH"  \
                 -DCMAKE_BUILD_TYPE=Release                      \
                 -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX    \
+                -DLIBCXX_INCLUDE_TESTS=ON                       \
                 -DLLVM_PATH="$CLANG_SRC_DIR"                    \
                 $LIBCXX_SRC_DIR
 
