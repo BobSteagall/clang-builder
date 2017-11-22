@@ -1,6 +1,6 @@
 #!/bin/bash
 ##
-##  Script: install-clang.sh
+##  Script: stage-clang.sh
 ##
 ##  This top-level script installs the new Clang build into a staging location
 ##  suitable for building a distribution tarball and/or RPM.
@@ -27,6 +27,10 @@ then
 
     cd $CLANG_STAGEDIR/$CLANG_INSTALL_PREFIX/lib
     chmod 644 lib*.a *.so
+
+    cd $CLANG_STAGEDIR/$CLANG_INSTALL_PREFIX/bin
+    ln -vf -s clang cc
+    ln -vf -s clang++ c++
 
     cd $TOP_DIR
 
