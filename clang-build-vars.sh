@@ -90,19 +90,19 @@ if [ -z "$NO_PARSE_OPTS" ]
 then
     if [ $# == "0" ]
     then
-        export DO_CLANG=YES
-        export DO_CXXLIB=YES
-        export DO_TEST=YES
+        DO_CLANG=YES
+        DO_CXXLIB=YES
+        DO_TEST=YES
     else
         while getopts ":clhtT" opt
         do
             case $opt in
-                c ) export DO_CLANG=YES ;;
-                l ) export DO_CXXLIB=YES ;;
+                c ) DO_CLANG=YES ;;
+                l ) DO_CXXLIB=YES ;;
                 h ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
-                t ) export DO_TEST=YES ;;
-                T ) export DO_TEST= ;;
+                t ) DO_TEST=YES ;;
+                T ) DO_TEST= ;;
                 * ) echo "usage: $0 [-c] [-l] [-h] [-t|-T]"
                     exit 1 ;;
             esac
