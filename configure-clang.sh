@@ -201,7 +201,7 @@ then
             CC=$CLANG_BLD_DIR/bin/clang                         \
             CXX=$CLANG_BLD_DIR/bin/clang++                      \
             cmake -G "Unix Makefiles"                           \
-                -DLIBCXX_CXX_ABI=libstdc++                      \
+                -DLIBCXX_CXX_ABI=$GCC_CXX_ABI                   \
                 -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$GCC_INC_PATH"  \
                 -DCMAKE_BUILD_TYPE=Release                      \
                 -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX    \

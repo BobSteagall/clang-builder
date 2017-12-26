@@ -100,13 +100,13 @@ then
         then
             echo "Applying compiler driver patches..."
             cp -pv Linux.h Linux.h-orig
-            patch Linux.h $TOP_DIR/patches/Linux.h.patch
+            patch --verbose Linux.h $TOP_DIR/patches/Linux.h.patch
 
             cp -pv Linux.cpp Linux.cpp-orig
-            patch Linux.cpp $TOP_DIR/patches/Linux.cpp.patch
+            patch --verbose Linux.cpp $TOP_DIR/patches/Linux.cpp-${GCC_CXX_ABI}.patch
 
             cp -pv FreeBSD.cpp FreeBSD.cpp-orig
-            patch FreeBSD.cpp $TOP_DIR/patches/FreeBSD.cpp.patch
+            patch --verbose FreeBSD.cpp $TOP_DIR/patches/FreeBSD.cpp.patch
         fi
 
         echo "Saving status..."
