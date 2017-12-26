@@ -1,0 +1,37 @@
+--- Linux.cpp-orig	2017-06-03 12:47:06.000000000 -0400
++++ Linux.cpp	2017-12-25 18:46:24.450324926 -0500
+@@ -261,6 +261,11 @@
+   const std::string OSLibDir = getOSLibDir(Triple, Args);
+   const std::string MultiarchTriple = getMultiarchTriple(D, Triple, SysRoot);
+ 
++  //- KEWB
++  if (GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) {
++    addPathIfExists(D, getDriver().Dir + "/../lib", Paths);
++  }
++
+   // Add the multilib suffixed paths where they are available.
+   if (GCCInstallation.isValid()) {
+     const llvm::Triple &GCCTriple = GCCInstallation.getTriple();
+@@ -795,6 +800,22 @@
+   }
+ }
+ 
++//- KEWB
++void Linux::AddCXXStdlibLibArgs(const ArgList &Args,
++                                ArgStringList &CmdArgs) const {
++  CXXStdlibType Type = GetCXXStdlibType(Args);
++
++  switch (Type) {
++  case ToolChain::CST_Libcxx:
++    CmdArgs.push_back("-lc++");
++    break;
++
++  case ToolChain::CST_Libstdcxx:
++    CmdArgs.push_back("-lstdc++");
++    break;
++  }
++}
++
+ void Linux::AddCudaIncludeArgs(const ArgList &DriverArgs,
+                                ArgStringList &CC1Args) const {
+   CudaInstallation.AddCudaIncludeArgs(DriverArgs, CC1Args);
