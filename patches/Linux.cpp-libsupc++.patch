@@ -12,7 +12,7 @@
    // Add the multilib suffixed paths where they are available.
    if (GCCInstallation.isValid()) {
      const llvm::Triple &GCCTriple = GCCInstallation.getTriple();
-@@ -800,6 +805,22 @@
+@@ -800,6 +805,23 @@
    }
  }
  
@@ -24,6 +24,7 @@
 +  switch (Type) {
 +  case ToolChain::CST_Libcxx:
 +    CmdArgs.push_back("-lc++");
++    CmdArgs.push_back("-lsupc++");
 +    break;
 +
 +  case ToolChain::CST_Libstdcxx:
