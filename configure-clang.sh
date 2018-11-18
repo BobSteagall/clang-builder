@@ -164,72 +164,20 @@ then
         elif [ "$CLANG_PLATFORM" == "Linux" ]
         then
             echo "for Linux... "
-
-            ##- Get the location of the system headers for this GCC distribution; the
-            ##  ABI headers are usually in the first two directories.
-            ##
-            GCC_DIRS=`echo | $GCC_BIN -Wp,-v -x c++ - -fsyntax-only 2>&1 | grep "^ /"`
-            GCC_DIR_ARR=( $GCC_DIRS )
-            GCC_DIR0=`readlink -f ${GCC_DIR_ARR[0]}`
-            GCC_DIR1=`readlink -f ${GCC_DIR_ARR[1]}`
-            GCC_INC_PATH="$GCC_DIR0;$GCC_DIR1"
-
-            echo "GCC include path for ABI is: $GCC_INC_PATH"
-
-            ##- Check to see if this is a newer GCC that has the ABI header file
-            ##  <bits/cxxabi_init_exception.h>.  If it does, then one of the libc++
-            ##  CMake files needs patching.
-            ##
-            GCC_CXXABI_INITX=`find $GCC_INSTALL_PREFIX -name 'cxxabi_init_exception.h'`
-
-            if [ -n "$GCC_CXXABI_INITX" ];
-            then
-                pushd $LIBCXX_SRC_DIR/cmake/Modules
-                LINE1=`egrep -n 'bits/cxxabi_forced.h' HandleLibCXXABI.cmake`
-
-                if [ -n "$LINE1" ]
-                then
-                    LINE1=`echo $LINE1 | cut -f 1 -d ':'`
-                    cp -pv HandleLibCXXABI.cmake HandleLibCXXABI.cmake-orig
-                    sed -i "${LINE1} s|$| bits/cxxabi_init_exception.h|" HandleLibCXXABI.cmake
-                fi
-                popd
-            fi
+            echo "GCC include path for ABI is: $GCC_CXX_ABI_INC_PATH"
 
             ##- Build the makefile that makes libc++.
             ##
-            CC=$CLANG_BLD_DIR/bin/clang                         \
-            CXX=$CLANG_BLD_DIR/bin/clang++                      \
-            cmake -G "Unix Makefiles"                           \
-                -DLIBCXX_CXX_ABI=$GCC_CXX_ABI                   \
-                -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$GCC_INC_PATH"  \
-                -DCMAKE_BUILD_TYPE=Release                      \
-                -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX    \
-                -DLIBCXX_INCLUDE_TESTS=ON                       \
-                -DLLVM_PATH="$CLANG_SRC_DIR"                    \
+            CC=$CLANG_BLD_DIR/bin/clang                                 \
+            CXX=$CLANG_BLD_DIR/bin/clang++                              \
+            cmake -G "Unix Makefiles"                                   \
+                -DLIBCXX_CXX_ABI=$GCC_CXX_ABI                           \
+                -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$GCC_CXX_ABI_INC_PATH"  \
+                -DCMAKE_BUILD_TYPE=Release                              \
+                -DCMAKE_INSTALL_PREFIX=$CLANG_INSTALL_PREFIX            \
+                -DLIBCXX_INCLUDE_TESTS=ON                               \
+                -DLLVM_PATH="$CLANG_SRC_DIR"                            \
                 $LIBCXX_SRC_DIR
-
-            ##- Check to see if this is a newer GCC that defines the member function
-            ##  __pbase_type_info::__pointer_catch() in the cxxabi.h header file. If
-            ##  it is, we're going to insert conditional compilation directives to
-            ##  ensure that the Clang compiler does not see this definition.  This
-            ##  fixup can only be performed after the cmake command above, which is
-            ##  why it's here instead of the unpack-clang.sh script.
-            ##
-            cd $LIBCXX_BLD_DIR/include/c++/v1
-            LINE1=`egrep -n 'inline.+__pbase_type_info[[:space:]]*::' cxxabi.h`
-
-            if [ -n "$LINE1" ]
-            then
-                LINE1=`echo $LINE1 | cut -f 1 -d ':'`
-                LINE2=$(($LINE1 + 7))
-
-                cp -pv cxxabi.h cxxabi.h-orig
-                sed "${LINE2}i #endif"            cxxabi.h     > cxxabi.h.tmp
-                sed "${LINE1}i #ifndef __clang__" cxxabi.h.tmp > cxxabi.h
-                rm cxxabi.h.tmp
-                cp -pv cxxabi.h $LIBCXX_BLD_DIR/include/c++build
-            fi
         fi
     else
         echo " found"

@@ -153,6 +153,52 @@ then
         echo " already exists"
     fi
 
+    ##- Check to see if this is a newer GCC that has the ABI header file
+    ##  <bits/cxxabi_init_exception.h>.  If it does, then one of the libc++
+    ##  CMake files needs patching.
+    ##
+    GCC_CXXABI_INITX=`find $GCC_INSTALL_PREFIX -name 'cxxabi_init_exception.h'`
+
+    if [ -n "$GCC_CXXABI_INITX" ];
+    then
+        pushd $LIBCXX_SRC_DIR/cmake/Modules
+        cp -pv HandleLibCXXABI.cmake HandleLibCXXABI.cmake-orig
+
+        patch --verbose HandleLibCXXABI.cmake $TOP_DIR/patches/HandleLibCXXABI.cmake.patch
+
+        LINE1=`egrep -n 'bits/cxxabi_forced.h' HandleLibCXXABI.cmake`
+        if [ -n "$LINE1" ]
+        then
+            LINE1=`echo $LINE1 | cut -f 1 -d ':'`
+            sed -i "${LINE1} s|$| bits/cxxabi_init_exception.h|" HandleLibCXXABI.cmake
+        fi
+        popd
+    fi
+
+    ##- Check to see if this is a newer GCC that defines the member function
+    ##  __pbase_type_info::__pointer_catch() in the cxxabi.h header file. If
+    ##  it is, we're going to insert conditional compilation directives to
+    ##  ensure that the Clang compiler does not see this definition.  When
+    ##  finished, we'll stash the result in ./patches, to be retrieved later
+    ##  by make-clang.sh.
+    ##
+    GCC_CXXABI_H=`find $GCC_INSTALL_PREFIX -name 'cxxabi.h'`
+    cp -pv $GCC_CXXABI_H $TOP_DIR/patches
+    pushd $TOP_DIR/patches
+
+    LINE1=`egrep -n 'inline.+__pbase_type_info[[:space:]]*::' cxxabi.h`
+
+    if [ -n "$LINE1" ]
+    then
+        LINE1=`echo $LINE1 | cut -f 1 -d ':'`
+        LINE2=$(($LINE1 + 7))
+
+        sed "${LINE2}i #endif"            cxxabi.h     > cxxabi.h.tmp
+        sed "${LINE1}i #ifndef __clang__" cxxabi.h.tmp > cxxabi.h
+        rm cxxabi.h.tmp
+    fi
+    popd
+
     echo ""
     echo "LIBC++ unpacking completed!"
     echo ""

@@ -36,7 +36,12 @@ then
 
     echo "Starting LIBC++ build..."
     cd $LIBCXX_BLD_DIR
-    VERBOSE=1 $CLANG_MAKE
+    $CLANG_MAKE
+
+    if [ -e $TOP_DIR/patches/cxxabi.h ]
+    then
+        mv -vf $TOP_DIR/patches/cxxabi.h $LIBCXX_BLD_DIR/include/c++build
+    fi
 
     echo ""
     echo "LIBC++ build completed!"
