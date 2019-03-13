@@ -11,7 +11,7 @@
 ##  version is determined by checking out a branch of the "clang-builder"
 ##  repo, rather than changing it here.
 ##
-export CLANG_VERSION=6.0.X
+export CLANG_VERSION=7.0.X
 
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang or clang++ with the -v flag
@@ -32,12 +32,12 @@ export CLANG_INSTALL_PREFIX=$CLANG_INSTALL_ROOT/clang/$CLANG_VERSION
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=201807131000
+export CLANG_TIME_STAMP=201811161000
 
 ##- Customize this variable if you want to change the arguments passed
 ##  to "make" that specify the number of threads used to build Clang.
 ##
-export CLANG_BUILD_THREADS_ARG='-j4'
+export CLANG_BUILD_THREADS_ARG='-j8'
 
 ##- If building on Linux, customize these variables to specify the location
 ##  of the preferred GCC toolchain partner on this platform.  The most
@@ -47,20 +47,21 @@ export CLANG_BUILD_THREADS_ARG='-j4'
 ##
 if [ `uname` == "Linux" ]
 then
-    export GCC_VERSION=8.1.0
+    export GCC_VERSION=8.2.0
     export GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
 fi
 
 ##- If building on Linux, customize this variable to specify the desired ABI
-##  that libc++ will be linked against.  The choices currently supported by
-##  these scripts are libstdc++ and libsupc++.
+##  support library that libc++ will be linked against.  The choices currently 
+##  supported by these scripts are libstdc++ and libsupc++.
 ##
 ##  If you think that you'll be building executables that link to shared
 ##  objects that are themselves linked to libstdc++, then you should specify
 ##  "GCC_CXX_ABI=libstdc++" below.
 ##
 ##  On the other hand, if you'll be building everything using a single version
-##  of Clang (this one), then it's OK to specify "GCC_CXX_ABI=libsupc++" below.
+##  of Clang (this one), and everything you link to is also built using that
+##  version of Clang, then it's OK to specify "GCC_CXX_ABI=libsupc++" below.
 ##
 if [ `uname` == "Linux" ]
 then
@@ -127,3 +128,16 @@ then
     fi
 fi
 
+##- If building on Linux, we need to locate the ABI headers.
+##
+if [ `uname` == "Linux" ]
+then
+    ##- Get the location of the system headers for this GCC distribution; the
+    ##  ABI headers are usually in the first two directories.
+    ##
+    GCC_DIRS=`echo | $GCC_BIN -Wp,-v -x c++ - -fsyntax-only 2>&1 | grep "^ /"`
+    GCC_DIR_ARR=( $GCC_DIRS )
+    GCC_DIR0=`readlink -f ${GCC_DIR_ARR[0]}`
+    GCC_DIR1=`readlink -f ${GCC_DIR_ARR[1]}`
+    GCC_CXX_ABI_INC_PATH="$GCC_DIR0;$GCC_DIR1"
+fi

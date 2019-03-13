@@ -1,10 +1,10 @@
 ================================================================================
- 2018-05-14
+ 2018-11-16
  Bob Steagall
  KEWB Computing
 ================================================================================
-This is the README file for the KEWB Clang 6.0.X build scripts.  In the
-following text, the version numbers will be referred to as 6.0.X or 60X,
+This is the README file for the KEWB Clang 7.0.X build scripts.  In the
+following text, the version numbers will be referred to as 7.0.X or 70X,
 depending on the usage and context.
 
 In order to run these scripts, the following prerequisites must be installed:
@@ -62,7 +62,7 @@ build process.  Each operation is a distinct step in that process.
     clang-build-vars.sh.
 
   * make-clang.sh - This script makes Clang from within the build subdirectory.
-    By default, tt runs with -j6 (i.e., up to 6 parallel processes); you can
+    By default, tt runs with -j8 (i.e., up to 8 parallel processes); you can
     change this value by modifying the CLANG_BUILD_THREADS_ARG variable defined
     in the clang-build-vars.sh script described above.
 
@@ -71,20 +71,20 @@ build process.  Each operation is a distinct step in that process.
 
 
 ----------------------------------------------
-4. HOW TO BUILD CLANG 6.0.X WITH THESE SCRIPTS
+4. HOW TO BUILD CLANG 7.0.X WITH THESE SCRIPTS
 
 The process is pretty simple:
 
- a. Clone the git repo and checkout the clang60 branch.
+ a. Clone the git repo and checkout the clang70 branch.
 
     $ cd <build_dir>
     $ git clone git@gitlab.com/BobSteagall/clang-builder.git
     $ cd <build_dir>/clang-builder
-    $ git checkout clang60
+    $ git checkout clang70
 
  b. Customize the variables exported by clang-build-vars.sh.  In particular,
     you will need to customize the first variable at the top of that file,
-    CLANG_VERSION, to select the version of Clang 6.0.X to download and build.
+    CLANG_VERSION, to select the version of Clang 7.0.X to download and build.
 
     $ vi ./clang-build-vars.sh
 
@@ -110,18 +110,18 @@ The process is pretty simple:
     the tarball:
 
     $ cd /
-    $ sudo tar -zxvf <build_dir>/clang-builder/packages/kewb-clang60X*.tgz
+    $ sudo tar -zxvf <build_dir>/clang-builder/packages/kewb-clang70X*.tgz
 
     or, alternatively:
 
-    $ sudo tar -zxvf ./clang-builder/packages/kewb-clang60X*.tgz -C /
+    $ sudo tar -zxvf ./clang-builder/packages/kewb-clang70X*.tgz -C /
 
     If you are satisfied that everything is working correctly, then at some
     point you'll want to set ownership of the un-tarred files to root:
 
     $ cd /usr/local
-    $ sudo chown -R root:root clang/6.0.X/
-    $ sudo chown root:root bin/*clang60X*
+    $ sudo chown -R root:root clang/7.0.X/
+    $ sudo chown root:root bin/*clang70X*
 
  f. If you want to create an RPM for subsequent installations:
 
@@ -134,15 +134,15 @@ The process is pretty simple:
 
 
 -----------------------------------------------
-5. HOW TO USE THE KEWB CUSTOM CLANG 6.0.X BUILD
+5. HOW TO USE THE KEWB CUSTOM CLANG 7.0.X BUILD
 
 Before using the compiler, some paths need to be set.  The simplest way to
-do this is source the "setenv-for-clang60X.sh" script that is installed.
+do this is source the "setenv-for-clang70X.sh" script that is installed.
 
- a. Source the script /usr/local/bin/setenv-for-clang-60X.sh, which was
+ a. Source the script /usr/local/bin/setenv-for-clang-70X.sh, which was
     installed in step 4.e or 4.f above.  For example,
 
-        $ source /usr/local/bin/setenv-for-clang60X.sh
+        $ source /usr/local/bin/setenv-for-clang70X.sh
 
 -- OR --
 
@@ -151,15 +151,15 @@ do this is source the "setenv-for-clang60X.sh" script that is installed.
     system default compiler is installed (which is usually in /usr/bin or
     /usr/local/bin).  For example,
 
-        $ export PATH=/usr/local/clang/6.0.X/bin:$PATH
+        $ export PATH=/usr/local/clang/7.0.X/bin:$PATH
 
  b. On Linux, you will also need to modify your LD_LIBRARY_PATH environment
     variable so that the $CLANG_INSTALL_PREFIX/lib, $GCC_INSTALL_PREFIX/lib,
     and $GCC_INSTALL_PREFIX/lib64 directories appear first in the path.  For
     example,
 
-        $ export LD_LIBRARY_PATH=/usr/local/clang/6.0.X/lib:\
-          /usr/local/gcc/8.1.0/lib:/usr/local/gcc/8.1.0/lib64:\
+        $ export LD_LIBRARY_PATH=/usr/local/clang/7.0.X/lib:\
+          /usr/local/gcc/8.2.0/lib:/usr/local/gcc/8.2.0/lib64:\
           $LD_LIBRARY_PATH
 
     On FreeBSD, it suffices to prepend LD_LIBRARY_PATH with only the
