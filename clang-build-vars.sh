@@ -7,15 +7,14 @@
 ##  It assumes that TOP_DIR has been defined appropriately by the caller,
 ##  and that it is being sourced by the calling script.
 ##
-##- Customize this variable to specify the version of Clang.  Normally the
-##  version is determined by checking out a branch of the "clang-builder"
-##  repo, rather than changing it here.
+##- Customize this variable to specify the version of Clang that you want
+##  to download and build.
 ##
-export CLANG_VERSION=7.0.X
+export CLANG_VERSION=8.0.X
 
 ##- Customize variable this to name the installation; the custom name
-##  is displayed when a user invokes clang or clang++ with the -v flag
-##  ("clang -v").
+##  is displayed when a user invokes clang/clang++ with the -v or --version
+##  flags ("clang -v").
 ##
 export CLANG_VENDOR="(KEWB Computing Build)"
 
@@ -27,12 +26,17 @@ export CLANG_CUSTOM_BUILD_TAG=kewb
 ##- Customize these variables to specify where this version of Clang will
 ##  be installed.
 ##
-export CLANG_INSTALL_ROOT=/usr/local
-export CLANG_INSTALL_PREFIX=$CLANG_INSTALL_ROOT/clang/$CLANG_VERSION
+export CLANG_INSTALL_PREFIX=/usr/local/clang/$CLANG_VERSION
+
+##- Customize this variable to specify where the scripts that set various
+##  important environment variables for using this version of GCC will be
+##  installed.
+##
+export CLANG_INSTALL_SCRIPTS_PREFIX=/usr/local/bin
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=201811161000
+export CLANG_TIME_STAMP=202002241000
 
 ##- Customize this variable if you want to change the arguments passed
 ##  to "make" that specify the number of threads used to build Clang.
@@ -47,7 +51,7 @@ export CLANG_BUILD_THREADS_ARG='-j8'
 ##
 if [ `uname` == "Linux" ]
 then
-    export GCC_VERSION=8.2.0
+    export GCC_VERSION=8.3.0
     export GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
 fi
 
@@ -84,7 +88,8 @@ export ALL_TARBALLS="$LLVM_TARBALL $CFE_TARBALL $CRT_TARBALL $CTX_TARBALL $LIB_T
 export CLANG_TAG="${CLANG_VERSION//.}"
 export CLANG_SRC_DIR=$TOP_DIR/llvm-$CLANG_VERSION
 export CLANG_BLD_DIR=$TOP_DIR/llvm-$CLANG_VERSION-build
-export CLANG_INSTALL_RELDIR=`echo $CLANG_INSTALL_PREFIX | sed 's:^/::'`
+export CLANG_INSTALL_RELDIR=${CLANG_INSTALL_PREFIX#/}
+export CLANG_INSTALL_SCRIPTS_RELDIR=${CLANG_INSTALL_SCRIPTS_PREFIX#/}
 
 export LIBCXX_SRC_DIR=$TOP_DIR/libcxx-$CLANG_VERSION
 export LIBCXX_BLD_DIR=$TOP_DIR/libcxx-$CLANG_VERSION-build

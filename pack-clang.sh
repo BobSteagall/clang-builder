@@ -20,12 +20,13 @@ PLATFORM_INFO=(`$TOP_DIR/system-type.sh -f`)
 PLATFORM_OS=${PLATFORM_INFO[0]}
 PLATFORM_NAME=${PLATFORM_INFO[1]}
 PLATFORM_ARCH=${PLATFORM_INFO[4]}
+PLATFORM_ARCH=${PLATFORM_INFO[5]}
 
 if [ "$PLATFORM_OS" = "FreeBSD" ] && [ "$PLATFORM_ARCH" = "amd64" ]; then
     PLATFORM_ARCH=x86_64
 fi
 
-PLATFORM_FULL="${PLATFORM_NAME}-${PLATFORM_ARCH}"
+PLATFORM_FULL="${PLATFORM_DESC}-${PLATFORM_ARCH}"
 
 ##- Make the main binary tarball.
 ##
@@ -36,11 +37,6 @@ rm -rf $TARBALL
 
 cd $CLANG_STAGEDIR
 
-tar -zcvf $TARBALL  \
-        usr/local/bin/clang$CLANG_TAG                               \
-        usr/local/bin/clang++$CLANG_TAG                             \
-        usr/local/bin/setenv-for-clang${CLANG_TAG}.sh               \
-        usr/local/bin/restore-default-paths-clang${CLANG_TAG}.sh    \
-        $CLANG_INSTALL_RELDIR
+tar -zcvf $TARBALL *
 
 touch -h -t $CLANG_TIME_STAMP $TARBALL

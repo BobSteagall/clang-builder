@@ -15,7 +15,7 @@ source ./clang-build-vars.sh
 
 if [ "$CLANG_PLATFORM" == "Linux" ]
 then
-    export LD_LIBRARY_PATH=$GCC_INSTALL_PREFIX/lib:$GCC_INSTALL_PREFIX/lib64
+    export LD_LIBRARY_PATH=$GCC_INSTALL_PREFIX/lib:$GCC_INSTALL_PREFIX/lib64:$LD_LIBRARY_PATH
     echo "ldpath for testing is $LD_LIBRARY_PATH"
 fi
 

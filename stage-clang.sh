@@ -16,7 +16,7 @@ source ./clang-build-vars.sh
 
 ##- Make the dummy installation directory.
 ##
-mkdir -p $CLANG_STAGEDIR/usr/local/bin
+mkdir -p $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR
 
 ##- Install LLVM and CLANG.
 ##
@@ -54,12 +54,12 @@ then
     fi
 
     chmod 755 ./setenv-for-clang$CLANG_TAG.sh
-    mv -vf ./setenv-for-clang$CLANG_TAG.sh  $CLANG_STAGEDIR/usr/local/bin
+    mv -vf ./setenv-for-clang$CLANG_TAG.sh  $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR
     cp -v ./restore-default-paths.sh ./restore-default-paths-clang$CLANG_TAG.sh
     chmod 755 ./restore-default-paths-clang$CLANG_TAG.sh
-    mv -vf ./restore-default-paths-clang$CLANG_TAG.sh  $CLANG_STAGEDIR/usr/local/bin
+    mv -vf ./restore-default-paths-clang$CLANG_TAG.sh  $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR
 
-    cd $CLANG_STAGEDIR/usr/local/bin
+    cd $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR
 
     ln -vf -s $CLANG_INSTALL_PREFIX/bin/clang   clang$CLANG_TAG
     ln -vf -s $CLANG_INSTALL_PREFIX/bin/clang++ clang++$CLANG_TAG
@@ -93,15 +93,5 @@ fi
 ##
 cd $CLANG_STAGEDIR
 find $CLANG_STAGEDIR/$CLANG_INSTALL_RELDIR -exec touch -h -t $CLANG_TIME_STAMP {} \+
-
-if [ -n "$DO_CLANG" ]
-then
-    cd $CLANG_STAGEDIR/usr/local/bin
-    touch -h -t $CLANG_TIME_STAMP clang$CLANG_TAG
-    touch -h -t $CLANG_TIME_STAMP clang++$CLANG_TAG
-    touch -h -t $CLANG_TIME_STAMP setenv-for-clang$CLANG_TAG.sh
-    touch -h -t $CLANG_TIME_STAMP restore-default-paths-clang$CLANG_TAG.sh
-fi
-
+find $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR -exec touch -h -t $CLANG_TIME_STAMP {} \+
 echo ""
-
