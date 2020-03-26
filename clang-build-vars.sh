@@ -10,7 +10,7 @@
 ##- Customize this variable to specify the version of Clang that you want
 ##  to download and build.
 ##
-export CLANG_VERSION=9.0.X
+export CLANG_VERSION=10.0.X
 
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang/clang++ with the -v or --version
