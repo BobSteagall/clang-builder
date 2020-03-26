@@ -10,7 +10,7 @@
 ##- Customize this variable to specify the version of Clang that you want
 ##  to download and build.
 ##
-export CLANG_VERSION=8.0.X
+export CLANG_VERSION=9.0.X
 
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang/clang++ with the -v or --version
@@ -36,7 +36,7 @@ export CLANG_INSTALL_SCRIPTS_PREFIX=/usr/local/bin
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=202003251000
+export CLANG_TIME_STAMP=202003261000
 
 ##- Customize this variable if you want to change the arguments passed
 ##  to "make" that specify the number of threads used to build Clang.
@@ -51,7 +51,7 @@ export CLANG_BUILD_THREADS_ARG='-j16'
 ##
 if [ `uname` == "Linux" ]
 then
-    export GCC_VERSION=8.3.0
+    export GCC_VERSION=9.3.0
     export GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
 fi
 
@@ -79,7 +79,7 @@ fi
 export CLANG_PLATFORM=`uname`
 
 export LLVM_TARBALL=llvm-$CLANG_VERSION.src.tar.xz
-export CFE_TARBALL=cfe-$CLANG_VERSION.src.tar.xz
+export CFE_TARBALL=clang-$CLANG_VERSION.src.tar.xz
 export CRT_TARBALL=compiler-rt-$CLANG_VERSION.src.tar.xz
 export CTX_TARBALL=clang-tools-extra-$CLANG_VERSION.src.tar.xz
 export LIB_TARBALL=libcxx-$CLANG_VERSION.src.tar.xz

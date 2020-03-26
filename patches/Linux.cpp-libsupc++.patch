@@ -1,6 +1,6 @@
---- Linux.cpp-orig	2019-04-22 23:32:01.000000000 -0400
-+++ Linux.cpp	2020-03-26 09:55:59.740275394 -0400
-@@ -320,6 +320,11 @@
+--- Linux.cpp-orig	2019-12-11 14:15:30.000000000 -0500
++++ Linux.cpp	2020-03-26 12:04:46.950294686 -0400
+@@ -317,6 +317,11 @@
    const std::string OSLibDir = getOSLibDir(Triple, Args);
    const std::string MultiarchTriple = getMultiarchTriple(D, Triple, SysRoot);
  
@@ -12,7 +12,7 @@
    // Add the multilib suffixed paths where they are available.
    if (GCCInstallation.isValid()) {
      const llvm::Triple &GCCTriple = GCCInstallation.getTriple();
-@@ -957,6 +962,23 @@
+@@ -959,6 +964,23 @@
    }
  }
  
