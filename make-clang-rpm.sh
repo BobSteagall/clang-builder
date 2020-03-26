@@ -112,9 +112,9 @@ OUTPUT_DIR=$WORK_DIR
 ##  on Linux, then figure out what that is.
 ##
 if [ "$PLATFORM_OS" = "Linux" ]; then
-    GCC_VERSION=`$BO_ROOT_DIR/$CLANG_INSTALL_RELDIR/bin/clang -v 2>&1   \
-                | grep "Selected GCC"                                   \
-                | grep -o "/[0-9]\.[0-9]\.[0-9]$"                       \
+    GCC_VERSION=`$BO_ROOT_DIR/$CLANG_INSTALL_RELDIR/bin/clang -v 2>&1       \
+                | grep "Selected GCC"                                       \
+                | grep -o "/[0-9]\.[0-9]\.[0-9]$"                           \
                 | tr -d '/' `
     GCC_TAG=`echo $GCC_VERSION | tr -d .`
 else
@@ -126,21 +126,23 @@ fi
 ##
 function rpmcmd ()
 {
-    rpmbuild -bb $RPM_QUIET                                 \
-    --define "build_root_dir $BO_ROOT_DIR"                  \
-    --define "clang_install_prefix $CLANG_INSTALL_PREFIX"   \
-    --define "clang_install_reldir $CLANG_INSTALL_RELDIR"   \
-    --define "clang_tag $CLANG_TAG"                         \
-    --define "clang_version $CLANG_VERSION"                 \
-    --define "clang_rpm_release $RPM_RELEASE"               \
-    --define "gcc_tag $GCC_TAG"                             \
-    --define "gcc_version $GCC_VERSION"                     \
-    --define "product_arch $PLATFORM_ARCH"                  \
-    --define "product_os $PLATFORM_OS"                      \
-    --define "_topdir $WORK_DIR"                            \
-    --define "_tmppath $WORK_DIR/TMP"                       \
-    --define "_rpmdir $OUTPUT_DIR"                          \
-    --define "_build_name_fmt %%{NAME}-%%{RELEASE}.%%{ARCH}.rpm" \
+    rpmbuild -bb $RPM_QUIET                                                 \
+    --define "build_root_dir $BO_ROOT_DIR"                                  \
+    --define "clang_install_prefix $CLANG_INSTALL_PREFIX"                   \
+    --define "clang_install_reldir $CLANG_INSTALL_RELDIR"                   \
+    --define "clang_install_scripts_prefix $CKANG_INSTALL_SCRIPTS_PREFIX"   \
+    --define "clang_install_scripts_reldir $CLANG_INSTALL_SCRIPTS_RELDIR"   \
+    --define "clang_tag $CLANG_TAG"                                         \
+    --define "clang_version $CLANG_VERSION"                                 \
+    --define "clang_rpm_release $RPM_RELEASE"                               \
+    --define "gcc_tag $GCC_TAG"                                             \
+    --define "gcc_version $GCC_VERSION"                                     \
+    --define "product_arch $PLATFORM_ARCH"                                  \
+    --define "product_os $PLATFORM_OS"                                      \
+    --define "_topdir $WORK_DIR"                                            \
+    --define "_tmppath $WORK_DIR/TMP"                                       \
+    --define "_rpmdir $OUTPUT_DIR"                                          \
+    --define "_build_name_fmt %%{NAME}-%%{RELEASE}.%%{ARCH}.rpm"            \
     $SPEC_FILE
 }
 

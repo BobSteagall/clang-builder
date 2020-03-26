@@ -14,8 +14,9 @@ cd $TOP_DIR
 ##
 source ./clang-build-vars.sh
 
-##- Make the dummy installation directory.
+##- Make the dummy installation directories.
 ##
+mkdir -p $CLANG_STAGEDIR/$CLANG_INSTALL_RELDIR
 mkdir -p $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR
 
 ##- Install LLVM and CLANG.

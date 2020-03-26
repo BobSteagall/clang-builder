@@ -17,34 +17,36 @@ source ./clang-build-vars.sh
 mkdir -p ./tarballs
 cd ./tarballs
 
+CLANG_URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-$CLANG_VERSION
+
 echo "Checking for required tarballs... "
 
 if [ ! -e $LLVM_TARBALL ]
 then
     echo "Downloading $LLVM_TARBALL... "
-    wget http://llvm.org/releases/$CLANG_VERSION/$LLVM_TARBALL
+    wget $CLANG_URL/$LLVM_TARBALL
 fi
 
 if [ ! -e $CFE_TARBALL ]
 then
     echo "Downloading $CFE_TARBALL... "
-    wget http://llvm.org/releases/$CLANG_VERSION/$CFE_TARBALL
+    wget $CLANG_URL/$CFE_TARBALL
 fi
 
 if [ ! -e $CRT_TARBALL ]
 then
     echo "Downloading $CRT_TARBALL... "
-    wget http://llvm.org/releases/$CLANG_VERSION/$CRT_TARBALL
+    wget $CLANG_URL/$CRT_TARBALL
 fi
 
 if [ ! -e $CTX_TARBALL ]
 then
     echo "Downloading $CTX_TARBALL... "
-    wget http://llvm.org/releases/$CLANG_VERSION/$CTX_TARBALL
+    wget $CLANG_URL/$CTX_TARBALL
 fi
 
 if [ ! -e $LIB_TARBALL ]
 then
     echo "Downloading $LIB_TARBALL... "
-    wget http://llvm.org/releases/$CLANG_VERSION/$LIB_TARBALL
+    wget $CLANG_URL/$LIB_TARBALL
 fi

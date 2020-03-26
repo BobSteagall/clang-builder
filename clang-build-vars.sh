@@ -10,7 +10,7 @@
 ##- Customize this variable to specify the version of Clang that you want
 ##  to download and build.
 ##
-export CLANG_VERSION=8.0.X
+export CLANG_VERSION=8.0.1
 
 ##- Customize variable this to name the installation; the custom name
 ##  is displayed when a user invokes clang/clang++ with the -v or --version
@@ -29,14 +29,14 @@ export CLANG_CUSTOM_BUILD_TAG=kewb
 export CLANG_INSTALL_PREFIX=/usr/local/clang/$CLANG_VERSION
 
 ##- Customize this variable to specify where the scripts that set various
-##  important environment variables for using this version of GCC will be
+##  important environment variables for using this version of Clang will be
 ##  installed.
 ##
 export CLANG_INSTALL_SCRIPTS_PREFIX=/usr/local/bin
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=202002241000
+export CLANG_TIME_STAMP=202003251000
 
 ##- Customize this variable if you want to change the arguments passed
 ##  to "make" that specify the number of threads used to build Clang.
@@ -56,7 +56,7 @@ then
 fi
 
 ##- If building on Linux, customize this variable to specify the desired ABI
-##  support library that libc++ will be linked against.  The choices currently 
+##  support library that libc++ will be linked against.  The choices currently
 ##  supported by these scripts are libstdc++ and libsupc++.
 ##
 ##  If you think that you'll be building executables that link to shared
