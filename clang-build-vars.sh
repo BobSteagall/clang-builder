@@ -8,35 +8,25 @@
 ##  and that it is being sourced by the calling script.
 ##
 ##- Customize this variable to specify the version of Clang that you want
-##  to download and build.
+##  to download and build (replace the 'X.Y' with the minor version and
+##  patch level numbers).
 ##
-export CLANG_VERSION=10.0.X
+export CLANG_VERSION=10.X.Y
 
-##- Customize variable this to name the installation; the custom name
-##  is displayed when a user invokes clang/clang++ with the -v or --version
-##  flags ("clang -v").
-##
-export CLANG_VENDOR="(KEWB Computing Build)"
-
-##- Customize this variable to define the middle substring in the Clang
-##  build triple.
-##
-export CLANG_CUSTOM_BUILD_TAG=kewb
-
-##- Customize these variables to specify where this version of Clang will
+##- Customize this variables to specify where this version of Clang will
 ##  be installed.
 ##
 export CLANG_INSTALL_PREFIX=/usr/local/clang/$CLANG_VERSION
 
-##- Customize this variable to specify where the scripts that set various
-##  important environment variables for using this version of Clang will be
-##  installed.
+##- Customize this variable to specify where to install the scripts that
+##  set various important environment variables for using this custom
+##  Clang build in day-to-day work.
 ##
 export CLANG_INSTALL_SCRIPTS_PREFIX=/usr/local/bin
 
 ##- Customize this variable to specify the installation's time stamp.
 ##
-export CLANG_TIME_STAMP=202003261000
+export CLANG_TIME_STAMP=202208081000
 
 ##- Customize this variable if you want to change the arguments passed
 ##  to "make" that specify the number of threads used to build Clang.
@@ -44,15 +34,18 @@ export CLANG_TIME_STAMP=202003261000
 export CLANG_BUILD_THREADS_ARG='-j16'
 
 ##- If building on Linux, customize these variables to specify the location
-##  of the preferred GCC toolchain partner on this platform.  The most
-##  important thing is that the variable GCC_INSTALL_PREFIX be defined;
-##  it should have the same value as the --prefix flag used to configure
-##  the GCC installation.
+##  of the preferred GCC toolchain partner on this platform.  It can be the
+##  default system compiler, but also a custom GCC that you have built using
+##  gcc-builder.
+##
+##  The most important thing is that the variable GCC_INSTALL_PREFIX gets
+##  defined; further, it should have the same value as the --prefix flag
+##  used to configure the GCC installation.
 ##
 if [ `uname` == "Linux" ]
 then
-    export GCC_VERSION=9.3.0
-    export GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
+    export GCC_VERSION=9.5.0
+    export GCC_INSTALL_PREFIX=/opt/tools/gcc/$GCC_VERSION
 fi
 
 ##- If building on Linux, customize this variable to specify the desired ABI
@@ -71,6 +64,21 @@ if [ `uname` == "Linux" ]
 then
     export GCC_CXX_ABI=libsupc++
 fi
+
+##------------------------------------------------------------------------------
+##      Maybe change below this line, if you have a good reason.
+##------------------------------------------------------------------------------
+##
+##- Customize variable this to name the installation; the custom name
+##  is displayed when a user invokes clang/clang++ with the -v or --version
+##  flags ("clang -v").
+##
+export CLANG_VENDOR="(KEWB Computing Build)"
+
+##- Customize this variable to define the middle substring in the Clang
+##  build triple.
+##
+export CLANG_CUSTOM_BUILD_TAG=kewb
 
 ##------------------------------------------------------------------------------
 ##      Do not change below this line!
@@ -105,9 +113,16 @@ then
     export GCC_BIN=$GCC_INSTALL_PREFIX/bin/gcc
     export CLANG_MAKE=make
 else
-    echo "Unknown build platform!"
+    echo "Error: unknown build platform!"
     exit 1
 fi
+
+if [ `uname` == "Linux" ] && [ ! -e $GCC_INSTALL_PREFIX ];
+then
+    echo "Error: can't find GCC install prefix '$GCC_INSTALL_PREFIX'"
+    exit 1
+fi
+
 
 if [ -z "$NO_PARSE_OPTS" ]
 then

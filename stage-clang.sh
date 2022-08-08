@@ -24,7 +24,7 @@ mkdir -p $CLANG_STAGEDIR/$CLANG_INSTALL_SCRIPTS_RELDIR
 if [ -n "$DO_CLANG" ]
 then
     cd $CLANG_BLD_DIR
-    $CLANG_MAKE install DESTDIR=$CLANG_STAGEDIR
+    $CLANG_MAKE install/strip DESTDIR=$CLANG_STAGEDIR
 
     cd $CLANG_STAGEDIR/$CLANG_INSTALL_PREFIX/lib
     chmod 644 lib*.a *.so
@@ -74,7 +74,7 @@ fi
 if [ -n "$DO_CXXLIB" ]
 then
     cd $LIBCXX_BLD_DIR
-    $CLANG_MAKE install DESTDIR=$CLANG_STAGEDIR
+    $CLANG_MAKE install/strip DESTDIR=$CLANG_STAGEDIR
 
     cd $CLANG_STAGEDIR/$CLANG_INSTALL_PREFIX/lib
 

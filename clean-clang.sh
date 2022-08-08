@@ -10,18 +10,19 @@
 export TOP_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd $TOP_DIR
 
-##- Get the GCC- and CLANG-related variables for this build.
+##- Get the GCC- and Clang-related variables for this build.
 ##
 source ./clang-build-vars.sh
 
 ##- Clean up after LLVM and CLANG.
 ##
+rm -rf ./custom_fixes_done
 rm -rf ./dist
 rm -rf ./packages
 
 if [ -n "$DO_CLANG" ]
 then
-    echo -n "removing LLVM and CLANG source and build directories... "
+    echo -n "removing LLVM and Clang source and build directories... "
     rm -rf $CLANG_SRC_DIR
     rm -rf $CLANG_BLD_DIR
     echo "done"

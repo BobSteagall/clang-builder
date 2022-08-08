@@ -14,7 +14,7 @@ cd $TOP_DIR
 ##- Get the Clang-related variables and command-line options for this build.
 ##
 source ./clang-build-vars.sh
-set -x
+
 ##- Retrieve useful information about the platform.
 ##
 PLATFORM_INFO=(`$TOP_DIR/system-type.sh -f`)
@@ -26,7 +26,7 @@ PLATFORM_DESC=${PLATFORM_INFO[5]}
 if [ "$PLATFORM_OS" = "FreeBSD" ] && [ "$PLATFORM_ARCH" = "amd64" ]; then
     PLATFORM_ARCH=x86_64
 fi
-set -x
+
 PLATFORM_FULL="${PLATFORM_DESC}-${PLATFORM_ARCH}"
 TARBALL=kewb-clang${CLANG_TAG}-${PLATFORM_FULL}.tgz
 

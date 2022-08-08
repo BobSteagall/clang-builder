@@ -130,16 +130,16 @@ then
         echo ""
         echo "Configuring LIBC++ build with CMake... "
 
-        ##- Now run the configue script.  There are several site-specific
+        ##- Now run the configure script.  There are several site-specific
         ##  extra options that are set, and here is why:
         ##
         ##  CXX=...  CC=...
-        ##      These environment variables are set to ensure that
-        ##      compilation occurs using the correct CLANG executables
+        ##      These environment variables are set to ensure that libc++
+        ##      compilation occurs using the correct Clang executables
         ##
         ##  -DLIBCXX_CXX_ABI=libcxxrt|libstdc++|libsuppc++
-        ##      This option is set to indicate that we want to use the LLVM
-        ##      libc++abi library as the runtime ABI support library.
+        ##      This option indicate the runtime ABI support library that we
+        ##      want libc++ to use.
         ##
         ##  -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$.."
         ##      This option indicates the location of the c++ ABI header files.

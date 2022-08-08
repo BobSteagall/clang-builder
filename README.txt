@@ -1,10 +1,10 @@
 ================================================================================
- 2020-03-26
+ 2022-08-08
  Bob Steagall
  KEWB Computing
 ================================================================================
-This is the README file for the KEWB Clang 10.0.X build scripts.  In the
-following text, the version numbers will be referred to as 10.0.X or 100X,
+This is the README file for the KEWB Clang 10.X.Y build scripts.  In the
+following text, the version numbers will be referred to as 10.X.Y or 10XY,
 depending on the usage and context.
 
 In order to run these scripts, the following prerequisites must be installed:
@@ -39,6 +39,10 @@ In order to run these scripts, the following prerequisites must be installed:
     files installed into the staging directory by the stage-clang.sh script.
     The resulting TGZ file will be in the ./packages subdirectory.
 
+  * install-clang-tarball.sh - This script unpacks the TGZ file created by
+    the packing script (pack-clang.sh) into the directory structure specified
+    in the build variables script (clang-build-vars.sh).
+
   * make-clang-rpm.sh - This script creates an RPM of the compiler files
     installed into the staging directory by the stage-clang.sh script.  The
     resulting RPM file will be in the ./packages subdirectory.
@@ -71,20 +75,23 @@ build process.  Each operation is a distinct step in that process.
 
 
 ----------------------------------------------
-4. HOW TO BUILD CLANG 10.0.X WITH THESE SCRIPTS
+4. HOW TO BUILD CLANG 10.X.Y WITH THESE SCRIPTS
+
+(NB: In the directions below, remember to replace the 'X' with the minor
+version number and the 'Y' with the patch level number!)
 
 The process is pretty simple:
 
- a. Clone the git repo and checkout the clang100 branch.
+ a. Clone the git repo and checkout the clang10 branch.
 
     $ cd <build_dir>
     $ git clone git@gitlab.com/BobSteagall/clang-builder.git
     $ cd <build_dir>/clang-builder
-    $ git checkout clang100
+    $ git checkout clang10
 
  b. Customize the variables exported by clang-build-vars.sh.  In particular,
     you will need to customize the first variable at the top of that file,
-    CLANG_VERSION, to select the version of Clang 10.0.X to download and build.
+    CLANG_VERSION, to select the version of Clang 10.X.Y to download and build.
 
     $ vi ./clang-build-vars.sh
 
@@ -109,19 +116,19 @@ The process is pretty simple:
     The resulting tarball will be in the ./packages subdirectory.  To install
     the tarball:
 
-    $ cd /
-    $ sudo tar -zxvf <build_dir>/clang-builder/packages/kewb-clang100X*.tgz
+    $ sudo ./install-clang-tarball.sh
 
     or, alternatively:
 
-    $ sudo tar -zxvf ./clang-builder/packages/kewb-clang100X*.tgz -C /
+    $ sudo tar -zxvf ./clang-builder/packages/kewb-clang10XY*.tgz -C /
 
     If you are satisfied that everything is working correctly, then at some
-    point you'll want to set ownership of the un-tarred files to root:
+    point you may want to set ownership of the un-tarred files to root
+    (replace CLANG_INSTALL_PREFIX and CLANG_INSTALL_SCRIPTS_PREFIX wit the
+    values that you defined in gcc-build-vars.sh):
 
-    $ cd /usr/local
-    $ sudo chown -R root:root clang/10.0.X/
-    $ sudo chown root:root bin/*clang100X*
+    $ sudo chown -R root:root $CLANG_INSTALL_PREFIX
+    $ sudo chown root:root $CLANG_INSTALL_SCRIPTS_PREFIX/*clang10XY*
 
  f. If you want to create an RPM for subsequent installations:
 
@@ -134,15 +141,15 @@ The process is pretty simple:
 
 
 -----------------------------------------------
-5. HOW TO USE THE KEWB CUSTOM CLANG 10.0.X BUILD
+5. HOW TO USE THE KEWB CUSTOM CLANG 10.X.Y BUILD
 
 Before using the compiler, some paths need to be set.  The simplest way to
-do this is source the "setenv-for-clang100X.sh" script that is installed.
+do this is source the "setenv-for-clang10XY.sh" script that is installed.
 
- a. Source the script /usr/local/bin/setenv-for-clang-100X.sh, which was
+ a. Source the script /usr/local/bin/setenv-for-clang-10XY.sh, which was
     installed in step 4.e or 4.f above.  For example,
 
-        $ source /usr/local/bin/setenv-for-clang100X.sh
+        $ source /usr/local/bin/setenv-for-clang10XY.sh
 
 -- OR --
 
@@ -151,17 +158,16 @@ do this is source the "setenv-for-clang100X.sh" script that is installed.
     system default compiler is installed (which is usually in /usr/bin or
     /usr/local/bin).  For example,
 
-        $ export PATH=/usr/local/clang/10.0.X/bin:$PATH
+        $ export PATH=/usr/local/clang/10.X.Y/bin:$PATH
 
  b. On Linux, you will also need to modify your LD_LIBRARY_PATH environment
     variable so that the $CLANG_INSTALL_PREFIX/lib, $GCC_INSTALL_PREFIX/lib,
     and $GCC_INSTALL_PREFIX/lib64 directories appear first in the path.  For
     example,
 
-        $ export LD_LIBRARY_PATH=/usr/local/clang/10.0.X/lib:\
-          /usr/local/gcc/9.3.0/lib:/usr/local/gcc/9.3.0/lib64:\
+        $ export LD_LIBRARY_PATH=/usr/local/clang/10.X.Y/lib:\
+          /usr/local/gcc/9.5.0/lib:/usr/local/gcc/9.5.0/lib64:\
           $LD_LIBRARY_PATH
 
     On FreeBSD, it suffices to prepend LD_LIBRARY_PATH with only the
     $CLANG_INSTALL_PREFIX/lib directory.
-

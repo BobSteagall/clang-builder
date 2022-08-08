@@ -22,57 +22,27 @@ NEW_CLANG_URL=https://github.com/llvm/llvm-project/releases/download/llvmorg-$CL
 
 echo "Checking for required tarballs... "
 
-if [ ! -e $LLVM_TARBALL ]
-then
-    echo "Downloading $LLVM_TARBALL... "
-    wget $NEW_CLANG_URL/$LLVM_TARBALL
+fetch_file() {
+    local REMOTE_URL=$1
+    local TARBALL=$2
 
-    if [ $? -ne 0 ]
+    if [ ! -e $TARBALL ]
     then
-        wget $OLD_CLANG_URL/$LLVM_TARBALL
+        echo "Downloading $TARBALL... "
+        wget -t 3 $REMOTE_URL/$TARBALL
+
+        if [ $? -ne 0 ]; then
+            echo "Error retrieving $TARBALL... verify the URL and file name...  exiting"
+            exit -1
+        fi
+    else
+        echo "Already have $TARBALL"
     fi
-fi
+}
 
-if [ ! -e $CFE_TARBALL ]
-then
-    echo "Downloading $CFE_TARBALL... "
-    wget $NEW_CLANG_URL/$CFE_TARBALL
+fetch_file  $NEW_CLANG_URL $LLVM_TARBALL
+fetch_file  $NEW_CLANG_URL $CFE_TARBALL
+fetch_file  $NEW_CLANG_URL $CRT_TARBALL
+fetch_file  $NEW_CLANG_URL $CTX_TARBALL
+fetch_file  $NEW_CLANG_URL $LIB_TARBALL
 
-    if [ $? -ne 0 ]
-    then
-        wget $OLD_CLANG_URL/$CFE_TARBALL
-    fi
-fi
-
-if [ ! -e $CRT_TARBALL ]
-then
-    echo "Downloading $CRT_TARBALL... "
-    wget $NEW_CLANG_URL/$CRT_TARBALL
-
-    if [ $? -ne 0 ]
-    then
-        wget $OLD_CLANG_URL/$CRT_TARBALL
-    fi
-fi
-
-if [ ! -e $CTX_TARBALL ]
-then
-    echo "Downloading $CTX_TARBALL... "
-    wget $NEW_CLANG_URL/$CTX_TARBALL
-
-    if [ $? -ne 0 ]
-    then
-        wget $OLD_CLANG_URL/$CTX_TARBALL
-    fi
-fi
-
-if [ ! -e $LIB_TARBALL ]
-then
-    echo "Downloading $LIB_TARBALL... "
-    wget $NEW_CLANG_URL/$LIB_TARBALL
-
-    if [ $? -ne 0 ]
-    then
-        wget $OLD_CLANG_URL/$LIB_TARBALL
-    fi
-fi

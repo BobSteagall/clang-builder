@@ -2,12 +2,16 @@ binutils-2*
 gcc-5*
 gcc-6*
 gcc-7*
+gcc-8*
+gcc-9*
+gcc-1*
 llvm-*
 libcxx-*
 libcxxabi-*
 dist
 packages
 tarballs
-tmp
+tmp*
 build*.log*
+custom_fixes_done
 *~

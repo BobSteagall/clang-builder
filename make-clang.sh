@@ -36,7 +36,7 @@ then
 
     echo "Starting LIBC++ build..."
     cd $LIBCXX_BLD_DIR
-    $CLANG_MAKE
+    $CLANG_MAKE $CLANG_BUILD_THREADS_ARG
 
     if [ -e $TOP_DIR/patches/cxxabi.h ]
     then
