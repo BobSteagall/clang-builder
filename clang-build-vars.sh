@@ -45,7 +45,7 @@ export CLANG_BUILD_THREADS_ARG='-j16'
 if [ `uname` == "Linux" ]
 then
     export GCC_VERSION=9.5.0
-    export GCC_INSTALL_PREFIX=/opt/tools/gcc/$GCC_VERSION
+    export GCC_INSTALL_PREFIX=/usr/local/gcc/$GCC_VERSION
 fi
 
 ##- If building on Linux, customize this variable to specify the desired ABI
